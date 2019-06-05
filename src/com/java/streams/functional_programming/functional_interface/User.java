@@ -1,4 +1,4 @@
-package com.java.test;
+package com.java.streams.functional_programming.functional_interface;
 
 public class User {
 	  private final int age;
@@ -27,9 +27,11 @@ public class User {
 	public String toString() {
 		return "User [age=" + age + ", name=" + name + ", sex=" + sex + "]";
 	}
-	  	  	  
-}
+	  
+	  
+	  
+	}
 
-enum Sex {
-  MALE, FEMALE
-}
+	enum Sex {
+	  MALE, FEMALE
+	}

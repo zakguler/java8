@@ -4,12 +4,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import com.java8.streams.collector.Department;
-import com.java8.streams.collector.Employee;
+import com.java.Common_ENUM.Sex;
+import com.java.Common_MODELS.User;
 
 // Functional programming: using Predicate
 

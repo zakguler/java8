@@ -1,6 +1,8 @@
-package com.java.test;
+package com.java.Common_MODELS;
 
-public class User {
+import com.java.Common_ENUM.Sex;
+
+public class User implements Comparable<User>{
 	  private final int age;
 	  private final String name;
 	  private final Sex sex;
@@ -27,9 +29,12 @@ public class User {
 	public String toString() {
 		return "User [age=" + age + ", name=" + name + ", sex=" + sex + "]";
 	}
-	  	  	  
-}
 
-enum Sex {
-  MALE, FEMALE
-}
+
+	@Override
+	public int compareTo(User o) {
+		return getName().compareTo(o.getName());
+	}
+	  	  
+	}
+

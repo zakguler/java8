@@ -1,11 +1,14 @@
 package com.java.collections.mapList;
 
-import java.util.ArrayList;
+//import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import com.java.Common_ENUM.Sex;
+import com.java.Common_MODELS.User;
 
 	// work with list inside a map
 	// Functional programming: using Predicate
@@ -112,12 +115,16 @@ import java.util.stream.Collectors;
 		
 		
 		public static List<User> filterUsers(List<User> allUsers, Predicate<User> predicate) {
-			List<User> result = new ArrayList<>();
-			for (User user : allUsers) {
-				if (predicate.test(user)) {
-					result.add(user);
-				}
-			}
+			
+//			List<User> result = new ArrayList<>();
+//			for (User user : allUsers) {
+//				if (predicate.test(user)) {
+//					result.add(user);
+//				}
+//			}
+			
+			List<User> result = allUsers.stream().filter(predicate).collect(Collectors.toList());
+			
 			return result;
 		}	
 		
