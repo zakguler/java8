@@ -6,6 +6,54 @@
 ---------------------------------------------------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------------------------------------
+Stream
+
+	.filter
+	.map
+	.flatmap ???
+	.Collect [terminal operation]............ List<String> asList = stringStream.collect(Collectors.toList());
+			(Collectors..toList()
+			(Collectors..groupingBy(Person::getCity)
+			
+			
+			
+
+---------------------------
+---------------------------
+Package java.util.function
+
+	Comparator..compare()................... (T, T) -> R.... personList.sort( (Person p1, Person p2)  ->  p1.getSurName().compareTo(p2.getSurName()) );
+	Comparable..compareTo().................
+	
+	Predicate..test()....................... T -> boolean... List<String> strString = filter( listOfStrings, (String s) -> s.!s.isEmpty() );
+	IntPredicate..test(int i)............... int -> int..... IntPredicate evenNumbers = (int i) -> i % 2 == 0;
+	DoublePredicate
+	BiPredicate..							(L, R) -> boolean
+	
+	Consumer..accept()...................... T -> void...... forEach(Arrays.asList(1,2,3,4,5), (Integer i) -> System.out.println(i) );
+	IntConsumer
+	BiConsumer..							(T, U) -> void
+	
+	Function..apply()....................... T -> R......... List<Integer> l = map(Array.asList( "Lambdas", "in", "action"), (String s) -> s.legth()) );
+	IntFunction
+	ToIntFunction							 T -> int
+	IntToDoubleFunction
+	BiFunction..apply().....................(T, U) -> R....................... (Apple a1, Apple a2)  ->  a1.getWeight().compareTo(a2.getWeight())
+	
+	Supplier..get()							() -> T......... () -> new Apple(10)  //it takes one argument and returns a result
+	
+	BinaryOperator..						(T, T) -> T
+	IntBinaryOperator..						(int, int) -> int................. (int a, int b) -> A * b
+	LongBinaryOperator
+	
+	UnaryOperator..							T -> T
+
+
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------
 ActionListener..actionPerformed()....... jpfPassword.addActionListener(e -> nOKButton.doClick());
 EventHandle..handle()................... button.setOnAction( (ActionEvent event) -> lable.setText("Sent!!") );
 
@@ -14,38 +62,10 @@ Callable..call()........................ () -> T........ Callable<Integer> p = (
 
 Runnable..run()......................... () -> void..... Thread t = new Thread( () -> System.out.println("Hello World") );
 
-Comparator..compare()................... (T, T) -> R.... personList.sort( (Person p1, Person p2)  ->  p1.getSurName().compareTo(p2.getSurName()) );
-Comparable..compareTo().................
-
-Predicate..test()....................... T -> boolean... List<String> strString = filter( listOfStrings, (String s) -> s.!s.isEmpty() );
-IntPredicate..test(int i)............... int -> int..... IntPredicate evenNumbers = (int i) -> i % 2 == 0;
-DoublePredicate
-BiPredicate..							(L, R) -> boolean
-
-Consumer..accept()...................... T -> void...... forEach(Arrays.asList(1,2,3,4,5), (Integer i) -> System.out.println(i) );
-IntConsumer
-BiConsumer..							(T, U) -> void
-
-Function..apply()....................... T -> R......... List<Integer> l = map(Array.asList( "Lambdas", "in", "action"), (String s) -> s.legth()) );
-IntFunction
-ToIntFunction							 T -> int
-IntToDoubleFunction
-BiFunction..apply().....................(T, U) -> R....................... (Apple a1, Apple a2)  ->  a1.getWeight().compareTo(a2.getWeight())
-
-Supplier..get()							() -> T......... () -> new Apple(10)  //it takes one argument and returns a result
-
-BinaryOperator..						(T, T) -> T
-IntBinaryOperator..						(int, int) -> int................. (int a, int b) -> A * b
-LongBinaryOperator
-
-UnaryOperator..							T -> T
 
 
-
-
----------------------------------------------------------------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------
+---------------------------
 // Split up the array of whole names into an array of first/last names
 List<Object[]> splitUpNames = Arrays.asList("John Woo", "Jeff Dean", "Josh Bloch", "Josh Long").stream()
 		.map(name -> name.split(" "))
