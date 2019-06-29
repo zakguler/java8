@@ -2,11 +2,15 @@
 -----------------------
 
 -Lambda: anonymous functions.
+-java 9: Modules and reactive programming toolkit. [synchronization/parallel programming]
+-java 11: new synchronous HTTP client library
+
 
 ---------------------------------------------------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------------------------------------
-Stream
+.Stream()
+.parallelStream()
 
 	.filter
 	.map
@@ -60,7 +64,15 @@ EventHandle..handle()................... button.setOnAction( (ActionEvent event)
 PrivilegedAction..run()................. () -> T........ PrivilegedAction<Integer> p = () -> 42;
 Callable..call()........................ () -> T........ Callable<Integer> p = () -> 42;
 
-Runnable..run()......................... () -> void..... Thread t = new Thread( () -> System.out.println("Hello World") );
+Runnable..run()......................... () -> void..... Thread t = new Thread( () -> System.out.println("Hello World") ); t.start();
+														//Runnable task = () -> {
+															    String threadName = Thread.currentThread().getName();
+															    System.out.println("Hello " + threadName);
+															};														
+															task.run();
+															
+															Thread thread = new Thread(task);
+															thread.start();
 
 
 
@@ -113,7 +125,11 @@ Topic topic = topics.stream().filter(e -> e.getId().equalsIgnoreCase(id)).findFi
 		
 		
 ==================================================================================================		
-[sort] inventory.sort(comparing(Apple::getWeight));
+[sort]  inventory.sort(comparing(Apple::getWeight));
+		personList.sort( (Person p1, Person p2)  ->  p1.getSurName().compareTo(p2.getSurName()) );
+		inventory.sort( (Apple a1, Apple a2)  ->  a1.getWeight().compareTo(a2.getWeight()) );
+		strList.sort((s1, s2) -> s1.compareToIgnoreCase(s2) );	
+		strList.sort( String::compareToIgnoreCase );
 		
 ==================================================================================================		
 [map]<list>
@@ -505,6 +521,8 @@ Supplier<Apple> s = () -> new Apple(10);<=======================================
 
 ---int portNumber = 1337;
    Runnable r = () -> System.out.println(portNumber); <=========================== lambda captures the local variable 'portNumber': must be effectively 'final'
+   r.run();
+   //Thread t = new Thread( () -> System.out.println("Hello World") );  t.start();  
       
 ---[Method reference :: ]
       
