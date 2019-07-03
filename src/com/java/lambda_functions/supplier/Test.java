@@ -1,4 +1,4 @@
-package com.java.streams.supplier_function;
+package com.java.lambda_functions.supplier;
 
 import java.util.function.*;
 
