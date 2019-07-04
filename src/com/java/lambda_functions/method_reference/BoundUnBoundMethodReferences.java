@@ -1,21 +1,21 @@
-package com.java.method_reference;
+package com.java.lambda_functions.method_reference;
 
 import java.util.function.*;
 
-public class Test {
+public class BoundUnBoundMethodReferences {
 
 	private final String name;
 
-	public Test(String name) {
+	public BoundUnBoundMethodReferences(String name) {
 		this.name = name;
 	}
 
 	public static void main(String[] args) {
-		Test t1 = new Test("t1");
-		Test t2 = new Test("t2");
+		BoundUnBoundMethodReferences t1 = new BoundUnBoundMethodReferences("t1");
+		BoundUnBoundMethodReferences t2 = new BoundUnBoundMethodReferences("t2");
 
-		Supplier<String> supplier = t2::methodx;
-		Function<Test, String> function = Test::methodx;
+		Supplier<String> supplier = t2::methodX;
+		Function<BoundUnBoundMethodReferences, String> function = BoundUnBoundMethodReferences::methodX;
 
 		// No need to say which instance to call it on -
 		// the supplier is bound to t2            
@@ -27,7 +27,7 @@ public class Test {
 		System.out.println(function.apply(t2));
 	}
 
-	public String methodx() {
+	public String methodX() {
 		return name;
 	}
 }

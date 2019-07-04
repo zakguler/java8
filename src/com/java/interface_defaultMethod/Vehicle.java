@@ -3,8 +3,8 @@ package com.java.interface_defaultMethod;
 @FunctionalInterface
 public interface Vehicle {
 
-	// you can have multiple implemented default, static methods
-	// for @FunctonalInterface: you can have only one abstract method
+	// you can have multiple 'implemented' default, static methods
+	// for @FunctonalInterface: you can have only one 'abstract' method
 	
     public void move();
     

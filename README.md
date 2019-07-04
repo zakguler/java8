@@ -28,11 +28,11 @@ Functional Interfaces
 
 Package java.util.function
 
-T: Object of generic type -first argument
-U: type -second argument
-L: ???
-R: Object of generic type return/result
-boolean: true/false
+	T: Object of generic type -first argument
+	U: type -second argument
+	L: ???
+	R: Object of generic type return/result
+	boolean: true/false
 
 
 	Function								 Functional descriptor
@@ -40,7 +40,12 @@ boolean: true/false
 	Comparator..compare()................... (T, T) -> R.... personList.sort( (Person p1, Person p2)  ->  p1.getSurName().compareTo(p2.getSurName()) );
 	Comparable..compareTo().................
 	
-	Predicate..test()....................... T -> boolean... List<String> strString = filter( listOfStrings, (String s) -> s.!s.isEmpty() );
+	Predicate.
+		.test()............................. T -> boolean... List<String> strString = filter( listOfStrings, (String s) -> s.!s.isEmpty() );
+		.isEqual()
+		.and()
+		.negate()
+		.or()
 	IntPredicate..test(int i)............... int -> int..... IntPredicate evenNumbers = (int i) -> i % 2 == 0;
 	DoublePredicate
 	BiPredicate..							(L, R) -> boolean
@@ -284,11 +289,10 @@ Topic topic = topics.stream().filter(e -> e.getId().equalsIgnoreCase(id)).findFi
 	[Bound][t2]........................ Supplier<String> supplier = t2::method;
 	[UnBound][class/instance name]..... Function<Test, String> function = Test::method;
 	
-	EX with 
-		[lambda] 	
+	EX with [lambda] 
 			inventory.sort( (Apple a1, Apple a2) -> a1.getWeight().compareTo(a2.getWeight()) );
-	   with
-	   	[method reference]		
+			
+	   with [method reference]		
 			inventory.sort(comparing(Apple::getWeight)); 
 
 
@@ -299,11 +303,13 @@ Topic topic = topics.stream().filter(e -> e.getId().equalsIgnoreCase(id)).findFi
     (String s) -> System.out.println(s) ............... System.out::println  
     (String s) -> this.isValidName(s).................. this::isValidName
            
-
-	[static method].....Integer::parseInt
-	[instance method]...String::length
+zak
+	[static method].................................... Integer::parseInt
+	[instance method].................................. String::length
 	[local method] Transaction expensiveTransaction.... expensiveTransaction::getValue 
-	[constructors] ????
+	[constructors][with 0 arguments]................... [new Apple()]=========>	Supplier<Apple> s = Apple::new; Apple a1 = s.get();
+	[constructors][with 1 arguments]................... [new Apple(weight)]===>	Function<Integer, Apple> s = Apple::new; Apple a1 = s.get(110);
+	[constructors][with 2 arguments]................... [new Apple(color, weight)]===>	BiFunction<Color, Integer, Apple> s = Apple::new; Apple a1 = s.get(GREEN, 110);
 	[array constructors] ???
 	[super calls] ???
 	
