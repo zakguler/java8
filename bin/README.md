@@ -26,6 +26,16 @@
 ---------------------------
 Functional Interfaces
 
+you can use lambda expression in the context of a Functional Interface 
+								[ contains ONLY one abstract method].
+								[ there is one exception to the rule that only one abstract method is allowed - 
+								[ a functional interface can have another abstract methods if they are implemented by java.lang.Object, 
+								[ for example toString().]
+
+-(parameters) -> expression
+-(parameters) -> {statements; }
+
+
 Package java.util.function
 
 	T: Object of generic type -first argument
@@ -38,8 +48,10 @@ Package java.util.function
 	Function								 Functional descriptor
 	--------								 ----------------------
 	Comparator..compare()................... (T, T) -> R.... personList.sort( (Person p1, Person p2)  ->  p1.getSurName().compareTo(p2.getSurName()) );
+	Comparator..comparing()................. Comparator<Apple> c = Comparator.comparing(Apple::getWeight());
 	Comparable..compareTo().................
-	
+
+
 	Predicate.
 		.test()............................. T -> boolean... List<String> strString = filter( listOfStrings, (String s) -> s.!s.isEmpty() );
 		.isEqual()
@@ -68,6 +80,124 @@ Package java.util.function
 	LongBinaryOperator
 	
 	UnaryOperator..							T -> T
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------
+>http://www.baeldung.com/java-8-double-colon-operator
+
+>[method reference] double colon '::' 
+	
+	[Bound][t2]........................ Supplier<String> supplier = t2::method;
+	[UnBound][class/instance name]..... Function<Test, String> function = Test::method;
+	
+	EX with [lambda] 
+			inventory.sort( (Apple a1, Apple a2) -> a1.getWeight().compareTo(a2.getWeight()) );
+			
+	   with [method reference]		
+			inventory.sort(comparing(Apple::getWeight)); 
+			inventory.sort(comparing(Apple::getWeight)reversed()); 
+
+
+    Lambda Method                                       reference equivalent    
+    (Apple a) -> a.getWeight() ........................ Apple::getWeight
+    () -> Thread.currentThread().dumpStack() .......... Thread.currentThread()::dumpStack
+    (str, i) -> str.substring(i) ...................... String::substring
+    (String s) -> System.out.println(s) ............... System.out::println  
+    (String s) -> this.isValidName(s).................. this::isValidName
+           
+zak
+	[static method].................................... Integer::parseInt
+	[instance method].................................. String::length
+	[local method] Transaction expensiveTransaction.... expensiveTransaction::getValue 
+	[constructors reference][with 0 arguments]................... [new Apple()]=========>	Supplier<Apple> s = Apple::new; Apple a1 = s.get();
+	[constructors reference][with 1 arguments]................... [new Apple(weight)]===>	Function<Integer, Apple> s = Apple::new; Apple a1 = s.get(110);
+	[constructors reference][with 2 arguments]................... [new Apple(color, weight)]===>	BiFunction<Color, Integer, Apple> s = Apple::new; Apple a1 = s.get(GREEN, 110);
+	[constructors reference][with 3 arguments]................... create your own CustomTriFunction<T, U, V, R>... see example below
+	[array constructors] ???
+	[super calls] ???
+	
+	
+	
+	
+	EX:
+		[constructors reference][with 3 arguments]................... create your own CustomTriFunction<T, U, V, R>
+			public interface CustomTriFunction<T, U, V, R> {
+				R apply(T t, U u, V v);
+			}
+			..
+			CustomTriFunction<Integer, Integer, Integer, RGB> colorFactory = RGB::new;
+			
+	EX: expensiveTransaction = new Transaction();
+		expensiveTransaction::getValue;	<====================== () -> expensiveTransaction.getValue();
+	
+	
+
+>https://stackoverflow.com/questions/35914775/java-8-difference-between-method-reference-bound-receiver-and-unbound-receiver
+>Java 8: Difference between method reference Bound Receiver and UnBound Receiver
+
+		EX1
+		The idea of unBound receiver such as String::length is that you’re referring to a method to 
+		an object that will be supplied as one of the parameters of the lambda. 
+		For example, the lambda expression (String s) -> s.toUpperCase() can be rewritten as String::toUpperCase.
+
+		But Bounded refers to a situation when you’re calling a method in a lambda to an external object 
+		that already exists. 
+		For example, the lambda expression () -> expensiveTransaction.getValue() 
+		can be rewritten as expensiveTransaction::getValue.
+
+		Situations for three different ways of method reference
+		basic rules:
+			(args) -> ClassName.staticMethod(args) can be ClassName::staticMethod
+	
+			(arg0, rest) -> arg0.instanceMethod(rest) can be ClassName::instanceMethod (arg0 is of type  ClassName)
+	
+			(args) -> expr.instanceMethod(args) can be expr::instanceMethod
+
+		Answer retired from Java 8 in Action book
+
+
+		----
+		EX2
+		Basically, unbound receivers allow you to use instance methods as 
+		if they were static methods with a first parameter of the declaring type - so 
+		you can use them as functions by passing in whatever instance you want. 
+		With a bound receiver, the "target" instance is effectively part of the 
+		function.
+
+		An example might make this clearer:
+
+		import java.util.function.*;
+
+		public class Test {
+
+			private final String name;
+
+			public Test(String name) {
+				this.name = name;
+			}
+
+			public static void main(String[] args) {
+				Test t1 = new Test("t1");
+				Test t2 = new Test("t2");
+
+				Supplier<String> supplier = t2::method;
+				Function<Test, String> function = Test::method;
+
+				// No need to say which instance to call it on -
+				// the supplier is bound to t2            
+				System.out.println(supplier.get());
+
+				// The function is unbound, so you need to specify
+				// which instance to call it on
+				System.out.println(function.apply(t1));
+				System.out.println(function.apply(t2));
+			}
+
+			public String method() {
+				return name;
+			}
 
 
 
@@ -161,10 +291,18 @@ Topic topic = topics.stream().filter(e -> e.getId().equalsIgnoreCase(id)).findFi
 		
 ==================================================================================================		
 [sort]  inventory.sort(comparing(Apple::getWeight));
+		inventory.sort(comparing(Apple::getWeight).reversed()); 
+		
+		inventory.sort(comparing(Apple::getWeight) 			// sort by decreasing weight
+						.reversed()
+						.thenComparing(Apple::getCountry)); // sort further by country when apples have the same weight.
+		
+
 		personList.sort( (Person p1, Person p2)  ->  p1.getSurName().compareTo(p2.getSurName()) );
 		inventory.sort( (Apple a1, Apple a2)  ->  a1.getWeight().compareTo(a2.getWeight()) );
 		strList.sort((s1, s2) -> s1.compareToIgnoreCase(s2) );	
 		strList.sort( String::compareToIgnoreCase );
+		
 		
 ==================================================================================================		
 [map]<list>
@@ -281,108 +419,6 @@ Topic topic = topics.stream().filter(e -> e.getId().equalsIgnoreCase(id)).findFi
 
 	
 			
-==================================================================================================
->http://www.baeldung.com/java-8-double-colon-operator
-
->[method reference] double colon '::' 
-	
-	[Bound][t2]........................ Supplier<String> supplier = t2::method;
-	[UnBound][class/instance name]..... Function<Test, String> function = Test::method;
-	
-	EX with [lambda] 
-			inventory.sort( (Apple a1, Apple a2) -> a1.getWeight().compareTo(a2.getWeight()) );
-			
-	   with [method reference]		
-			inventory.sort(comparing(Apple::getWeight)); 
-
-
-    Lambda Method                                       reference equivalent    
-    (Apple a) -> a.getWeight() ........................ Apple::getWeight
-    () -> Thread.currentThread().dumpStack() .......... Thread.currentThread()::dumpStack
-    (str, i) -> str.substring(i) ...................... String::substring
-    (String s) -> System.out.println(s) ............... System.out::println  
-    (String s) -> this.isValidName(s).................. this::isValidName
-           
-zak
-	[static method].................................... Integer::parseInt
-	[instance method].................................. String::length
-	[local method] Transaction expensiveTransaction.... expensiveTransaction::getValue 
-	[constructors][with 0 arguments]................... [new Apple()]=========>	Supplier<Apple> s = Apple::new; Apple a1 = s.get();
-	[constructors][with 1 arguments]................... [new Apple(weight)]===>	Function<Integer, Apple> s = Apple::new; Apple a1 = s.get(110);
-	[constructors][with 2 arguments]................... [new Apple(color, weight)]===>	BiFunction<Color, Integer, Apple> s = Apple::new; Apple a1 = s.get(GREEN, 110);
-	[array constructors] ???
-	[super calls] ???
-	
-	EX: expensiveTransaction = new Transaction();
-		expensiveTransaction::getValue;	<====================== () -> expensiveTransaction.getValue();
-	
-	
-
->https://stackoverflow.com/questions/35914775/java-8-difference-between-method-reference-bound-receiver-and-unbound-receiver
->Java 8: Difference between method reference Bound Receiver and UnBound Receiver
-
-		EX1
-		The idea of unBound receiver such as String::length is that you’re referring to a method to 
-		an object that will be supplied as one of the parameters of the lambda. 
-		For example, the lambda expression (String s) -> s.toUpperCase() can be rewritten as String::toUpperCase.
-
-		But Bounded refers to a situation when you’re calling a method in a lambda to an external object 
-		that already exists. 
-		For example, the lambda expression () -> expensiveTransaction.getValue() 
-		can be rewritten as expensiveTransaction::getValue.
-
-		Situations for three different ways of method reference
-		basic rules:
-			(args) -> ClassName.staticMethod(args) can be ClassName::staticMethod
-	
-			(arg0, rest) -> arg0.instanceMethod(rest) can be ClassName::instanceMethod (arg0 is of type  ClassName)
-	
-			(args) -> expr.instanceMethod(args) can be expr::instanceMethod
-
-		Answer retired from Java 8 in Action book
-
-
-		----
-		EX2
-		Basically, unbound receivers allow you to use instance methods as 
-		if they were static methods with a first parameter of the declaring type - so 
-		you can use them as functions by passing in whatever instance you want. 
-		With a bound receiver, the "target" instance is effectively part of the 
-		function.
-
-		An example might make this clearer:
-
-		import java.util.function.*;
-
-		public class Test {
-
-			private final String name;
-
-			public Test(String name) {
-				this.name = name;
-			}
-
-			public static void main(String[] args) {
-				Test t1 = new Test("t1");
-				Test t2 = new Test("t2");
-
-				Supplier<String> supplier = t2::method;
-				Function<Test, String> function = Test::method;
-
-				// No need to say which instance to call it on -
-				// the supplier is bound to t2            
-				System.out.println(supplier.get());
-
-				// The function is unbound, so you need to specify
-				// which instance to call it on
-				System.out.println(function.apply(t1));
-				System.out.println(function.apply(t2));
-			}
-
-			public String method() {
-				return name;
-			}
-
 
 ==================================================================================================
 >http://www.baeldung.com/java-8-interview-questions
@@ -459,23 +495,6 @@ zak
 ============================================================================================
 ============================================================================================
 ============================================================================================
-
-Functional Interfaces
-----------------------
-
-******* z_page 63: 3.6.2 Constructor references
-
-you can use lambda expression in the context of a Functional Interface 
-								[ contains ONLY one abstract method].
-								[ there is one exception to the rule that only one abstract method is allowed - 
-								[ a functional interface can have another abstract methods if they are implemented by java.lang.Object, 
-								[ for example toString().]
-
--(parameters) -> expression
--(parameters) -> {statements; }
-
--java.util.function.* ===> https://docs.oracle.com/javase/8/docs/api/java/util/function/package-summary.html
-
 
 ---------------------------------------------------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------------------------------------
