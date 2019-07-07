@@ -9,21 +9,6 @@
 ---------------------------------------------------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------------------------------------
-.Stream()
-.parallelStream()
-
-	.filter
-	.map
-	.flatmap ???
-	.Collect [terminal operation]............ List<String> asList = stringStream.collect(Collectors.toList());
-			(Collectors..toList()
-			(Collectors..groupingBy(Person::getCity)
-			
-			
-			
-
----------------------------
----------------------------
 Functional Interfaces
 
 you can use lambda expression in the context of a Functional Interface 
@@ -55,23 +40,30 @@ Package java.util.function
 	Predicate.
 		.test()............................. T -> boolean... List<String> strString = filter( listOfStrings, (String s) -> s.!s.isEmpty() );
 		.isEqual()
-		.and()
+		.and().............................. boolean outcome2 = nonNullPredicate.and(hasLengthOf10).test(nullString);
 		.negate()
 		.or()
+		-----so, a.or(b).and(c)	must be read as: (a || b) && c
+		-----    a.and(b).or(c) must be read as: (a && b) || c	
+		
 	IntPredicate..test(int i)............... int -> int..... IntPredicate evenNumbers = (int i) -> i % 2 == 0;
 	DoublePredicate
-	BiPredicate..							(L, R) -> boolean
+	BiPredicate............................. (L, R) -> boolean
+	
 	
 	Consumer..accept()...................... T -> void...... forEach(Arrays.asList(1,2,3,4,5), (Integer i) -> System.out.println(i) );
 	IntConsumer
 	BiConsumer..							(T, U) -> void
 	
 	Function..apply()....................... T -> R......... List<Integer> l = map(Array.asList( "Lambdas", "in", "action"), (String s) -> s.legth()) );
+			 .andThen()..................... f.andThen(g) ===> g(f(x))
+			 .compose()..................... f.compose(g) ===> f(g(x))
 	IntFunction
 	ToIntFunction							 T -> int
 	IntToDoubleFunction
 	BiFunction..apply().....................(T, U) -> R....................... (Apple a1, Apple a2)  ->  a1.getWeight().compareTo(a2.getWeight())
 	ToIntBiFunction<T,T>....................(T,T) -> int
+	
 	
 	Supplier..get()							() -> T......... () -> new Apple(10)  //it takes one argument and returns a result
 	
@@ -199,6 +191,22 @@ zak
 				return name;
 			}
 
+
+
+---------------------------
+---------------------------
+.Stream()
+.parallelStream()
+
+	.filter
+	.map
+	.flatmap ???
+	.Collect [terminal operation]............ List<String> asList = stringStream.collect(Collectors.toList());
+			(Collectors..toList()
+			(Collectors..groupingBy(Person::getCity)
+			
+			
+			
 
 
 ---------------------------------------------------------------------------------------------------------------------------------------------

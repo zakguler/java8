@@ -17,7 +17,6 @@ public class PridecateAndNonNull {
 //    }; 
 	public static Predicate<String> hasLengthOf10 = s -> s.length() > 10;
   
-    
     public static void main(String[] args) 
     { 
     	predicate_and(); 
