@@ -1,9 +1,10 @@
 # java 8,9,10 updates
 -----------------------
 
--Lambda: anonymous functions.
 -java 9: Modules and reactive programming toolkit. [synchronization/parallel programming]
 -java 11: new synchronous HTTP client library
+-Lambda: anonymous functions.
+-stream: let you manipulate collections of data in a declarative way. 
 
 
 ---------------------------------------------------------------------------------------------------------------------------------------------
@@ -99,7 +100,7 @@ Package java.util.function
     (String s) -> System.out.println(s) ............... System.out::println  
     (String s) -> this.isValidName(s).................. this::isValidName
            
-zak
+
 	[static method].................................... Integer::parseInt
 	[instance method].................................. String::length
 	[local method] Transaction expensiveTransaction.... expensiveTransaction::getValue 
@@ -199,6 +200,7 @@ zak
 .parallelStream()
 
 	.filter
+	.sort
 	.map
 	.flatmap ???
 	.Collect [terminal operation]............ List<String> asList = stringStream.collect(Collectors.toList());
@@ -206,7 +208,11 @@ zak
 			(Collectors..groupingBy(Person::getCity)
 			
 			
-			
+	-generating a stream from an ordered collection preserves the ordering.
+	 	
+zak	 	
+	 	
+	 		
 
 
 ---------------------------------------------------------------------------------------------------------------------------------------------
