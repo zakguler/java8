@@ -196,16 +196,38 @@ Package java.util.function
 
 ---------------------------
 ---------------------------
-.Stream()
+.stream()
 .parallelStream()
 
-	.filter
-	.sort
-	.map
-	.flatmap ???
-	.Collect [terminal operation]............ List<String> asList = stringStream.collect(Collectors.toList());
-			(Collectors..toList()
-			(Collectors..groupingBy(Person::getCity)
+	-stream pipeline is similar to the [builder pattern] [chain of calls]
+
+	-[lazy] intermediate operations: <====== return another stream 
+			.filter [T -> boolean]
+			.sorted [(T, T) -> int]
+			.distinct [lazy]???
+			
+			.map [short-circuiting] [T -> R] 
+			.limit
+			.build
+
+			
+	-terminal operations:	<=============== result in any non-stream value [ex: list, Integer, void...]
+			.collect
+			.forEach
+			.count
+			
+			
+
+
+	menu.stream()
+		.filter
+		.sort
+		.map
+		.limit(3)
+		.flatmap ???
+		.Collect [terminal operation]............ List<String> asList = stringStream.collect(Collectors.toList());
+				(Collectors..toList()
+				(Collectors..groupingBy(Person::getCity)
 			
 			
 	-generating a stream from an ordered collection preserves the ordering.
@@ -213,6 +235,29 @@ Package java.util.function
 zak	 	
 	 	
 	 		
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------
+[switch] with [lambda] expression:
+
+	enum Day {
+        MON, TUE, WED, THUR, FRI, SAT, SUN
+	};
+
+	public static String getDay (Day today) {
+        return switch(today) {
+               case MON, TUE  -> "Blues";
+		       case WED       -> "Hectic";
+		       case THUR, FRI -> "Getting Better";
+		       default        -> "Life!";
+        };
+	}
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		System.out.println(getDay(Day.TUE));
+	}
 
 
 ---------------------------------------------------------------------------------------------------------------------------------------------
