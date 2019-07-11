@@ -1,6 +1,6 @@
 package com.java.Common_MODELS;
 
-import com.java.streams.collector.Department;
+import com.java.streams.collector_grouping.Department;
 
 public class Employee {
 	  private String name;

@@ -200,46 +200,73 @@ Package java.util.function
 .parallelStream()
 
 	-stream pipeline is similar to the [builder pattern] [chain of calls]
+	
+	-generating a stream from an ordered collection preserves the ordering.
 
 	-[lazy] intermediate operations: <====== return another stream 
+		xyz.stream()
 			.filter [T -> boolean]
 			.sorted [(T, T) -> int]
 			.distinct [lazy]???
 			
-			.map [short-circuiting] [T -> R] 
-			.limit
+			.map() [short-circuiting] [T -> R] <==== function to create a new version of... [NOT modifying]
+			.map()	<======================= you can use multiple map(s), filter(s) ..
+			.flatmap ???
+			.limit()
+			.skip()	<======================= discards the first (n) elements.
 			.build
 
+			---
+			[Java9]
+			.takeWhile <==================== [must be a sorted list] +stops once a dish found >= 320
+			.dropWhile <==================== [must be a sorted list] +stops once a dish found > 320
+			
 			
 	-terminal operations:	<=============== result in any non-stream value [ex: list, Integer, void...]
 			.collect
+				(Collectors..toList()
+				(Collectors..groupingBy(Person::getCity)
+				
 			.forEach
 			.count
 			
 			
+	---------------------------------- 	
+	[.distinct]
+		List<Integer> numbers = Arrays.asList(1, 2, 1, 3, 3, 2, 4);
+		numbers.stream()
+				.filter(i -> i % 2 == 0)
+				.distinct()
+				.forEach(System.out::println);
+ 	
+ 	[slicing] 
+ 	[.takeWhile]
+			List<Dish> filteredMenu = specialMenu
+				.stream()
+				.takeWhile(dish -> dish.getCalories() < 320) // [must be a sorted list] +stops once a dish found >= 320
+				.collect(toList());
+		
+	 		
+	[filter]
+	[limit] 		
+	 		List<Dish> dishes = menu
+	 			.stream()
+				.filter(dish -> dish.getType() == Dish.Type.MEAT)
+				.limit(2)
+				.collect(toList());
 
-
-	menu.stream()
-		.filter
-		.sort
-		.map
-		.limit(3)
-		.flatmap ???
-		.Collect [terminal operation]............ List<String> asList = stringStream.collect(Collectors.toList());
-				(Collectors..toList()
-				(Collectors..groupingBy(Person::getCity)
-			
-			
-	-generating a stream from an ordered collection preserves the ordering.
-	 	
-zak	 	
-	 	
+	 		
+	 		
+	 		
+	 		
+	 		
 	 		
 
 ---------------------------------------------------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------------------------------------
 [switch] with [lambda] expression:
+[Java 12]
 
 	enum Day {
         MON, TUE, WED, THUR, FRI, SAT, SUN

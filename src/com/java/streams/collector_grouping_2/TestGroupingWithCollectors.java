@@ -1,4 +1,4 @@
-package com.java.streams.collector_2;
+package com.java.streams.collector_grouping_2;
 
 import java.util.Arrays;
 import java.util.List;

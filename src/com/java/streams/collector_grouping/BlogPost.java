@@ -1,4 +1,4 @@
-package com.java.streams.collector;
+package com.java.streams.collector_grouping;
 
 public class BlogPost {
 	public BlogPost(String title, String author, BlogPostType type, int likes) {

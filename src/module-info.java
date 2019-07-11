@@ -1,9 +1,8 @@
 module java_examples {
 	exports com.java.collections.mapList;
-	exports com.java.optionals;
-	exports com.java.streams.collector_2;
+	exports com.java.streams.collector_grouping_2;
 	exports com.java.streams.LazyStream;
-	exports com.java.streams.collector;
+	exports com.java.streams.collector_grouping;
 	exports com.java.streams.streambuilder;
 	exports com.java.lambda_functions.consumer;
 	exports com.java.streams.mapToObj;

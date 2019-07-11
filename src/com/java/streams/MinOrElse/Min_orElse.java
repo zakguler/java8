@@ -1,10 +1,8 @@
-package com.java.optionals;
-
-//??? where is Optional used ???
+package com.java.streams.MinOrElse;
 
 import java.util.Arrays;
 
-public class Test {
+public class Min_orElse {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub

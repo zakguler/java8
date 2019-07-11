@@ -1,6 +1,6 @@
 package com.java;
 
-public class SwitchStatement {
+public class J12_SwitchStatement {
 
 	enum Day {
         MON, TUE, WED, THUR, FRI, SAT, SUN
