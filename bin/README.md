@@ -203,6 +203,13 @@ Package java.util.function
 	
 	-generating a stream from an ordered collection preserves the ordering.
 
+
+	-Stream<String> streamOfWords = Arrays.stream( {"GoodBye", "World"} );
+	-IntStream intStream = IntStream.range(1, 5);
+
+
+	-static List<Dish> specialMenu = Arrays.asList( new Dish("seasonal fruit", true, 120, Dish.Type.OTHER), new Dish("prawns", false, 300, Dish.Type.FISH));
+
 	-[lazy] intermediate operations: <====== return another stream 
 		xyz.stream()
 			.filter [T -> boolean]
@@ -211,7 +218,7 @@ Package java.util.function
 			
 			.map() [short-circuiting] [T -> R] <==== function to create a new version of... [NOT modifying]
 			.map()	<======================= you can use multiple map(s), filter(s) ..
-			.flatmap ???
+			.flatmap <====================== combine multiple maps into one Stream<string[]>'s to Stream<String>
 			.limit()
 			.skip()	<======================= discards the first (n) elements.
 			.build
@@ -255,8 +262,16 @@ Package java.util.function
 				.limit(2)
 				.collect(toList());
 
-	 		
-	 		
+	[flatmap]			
+			List<String> words = Arrays.asList("Goodbye", "World");	
+			List<String> uniqueCharacters = words
+				.stream()
+				.map(word -> word.split(""))	// convert each word into an array of its individual letters
+												// each word => String[] of letters
+				.flatMap(Arrays::stream)	// flatten each generated stream into a single stream				
+				.distinct()
+				.collect(toList());
+			 		
 	 		
 	 		
 	 		
