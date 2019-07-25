@@ -196,6 +196,14 @@ Package java.util.function
 
 ---------------------------
 ---------------------------
+
+-Stream.concat( Stream()a, Stream(b) )
+	
+-collection.stream()	
+-Arrays.stream(arr)
+-Arrays.asList("a", "b", "c");
+
+
 .stream()
 .parallelStream()
 
@@ -205,38 +213,68 @@ Package java.util.function
 
 
 	-Stream<String> streamOfWords = Arrays.stream( {"GoodBye", "World"} );
-	-IntStream intStream = IntStream.range(1, 5);
 
 
 	-static List<Dish> specialMenu = Arrays.asList( new Dish("seasonal fruit", true, 120, Dish.Type.OTHER), new Dish("prawns", false, 300, Dish.Type.FISH));
 
+	-Stateless vs stateful
+			stateless:
+				.map
+				.filter
+				
+			stateful:
+				.reduce		[bounded]
+				.sorted		[unbounded]
+				.distict 	[unbounded]
+				.skip 		[bounded]
+				.limit		[bounded]
+				
+				
+				
+			
+
+	-intermediate and terminal operations
+	
 	-[lazy] intermediate operations: <====== return another stream 
 		xyz.stream()
 			.filter [T -> boolean]
 			.sorted [(T, T) -> int]
 			.distinct [lazy]???
 			
+			
 			.map() [short-circuiting] [T -> R] <==== function to create a new version of... [NOT modifying]
 			.map()	<======================= you can use multiple map(s), filter(s) ..
 			.flatmap <====================== combine multiple maps into one Stream<string[]>'s to Stream<String>
+			.concat(Stream<? extends T> a, Stream<? extends T> b)()
 			.limit()
 			.skip()	<======================= discards the first (n) elements.
-			.build
+			.build()
+			.sorted
 
-			---
 			[Java9]
-			.takeWhile <==================== [must be a sorted list] +stops once a dish found >= 320
-			.dropWhile <==================== [must be a sorted list] +stops once a dish found > 320
+			.takeWhile <==================== [must be a sorted list] +stops once an element found >= 320
+			.dropWhile <==================== [must be a sorted list] +stops once an element found > 320
 			
 			
 	-terminal operations:	<=============== result in any non-stream value [ex: list, Integer, void...]
+			import static java.util.stream.Collectors.*;
 			.collect
 				(Collectors..toList()
+				(Collectors..toSet()
+				(Collectors..joining(",")
 				(Collectors..groupingBy(Person::getCity)
+				
 				
 			.forEach
 			.count
+			.allMatch
+			.anyMatch
+			.noneMatch
+			.reduce	<======================= a stream is reduced to a value
 			
+			.findFirst()
+			.findAny()
+			.findEach			
 			
 	---------------------------------- 	
 	[.distinct]
@@ -246,8 +284,9 @@ Package java.util.function
 				.distinct()
 				.forEach(System.out::println);
  	
- 	[slicing] 
+ 	slicing 
  	[.takeWhile]
+ 			import static java.util.stream.Collectors.*;
 			List<Dish> filteredMenu = specialMenu
 				.stream()
 				.takeWhile(dish -> dish.getCalories() < 320) // [must be a sorted list] +stops once a dish found >= 320
@@ -255,14 +294,32 @@ Package java.util.function
 		
 	 		
 	[filter]
-	[limit] 		
+	[limit] 	
+			import static java.util.stream.Collectors.*;	
 	 		List<Dish> dishes = menu
 	 			.stream()
 				.filter(dish -> dish.getType() == Dish.Type.MEAT)
 				.limit(2)
 				.collect(toList());
 
-	[flatmap]			
+	[flatmap]
+	[flatMapToInt]	
+	
+			Stream can hold different data types, But, the Stream operations (filter, sum, distinct…) and collectors do not support it, 
+			so, we need flatMap() to do the following conversion :
+			
+				Stream<String[]>		-> flatMap ->	Stream<String>
+				Stream<Set<String>>	-> flatMap ->	Stream<String>
+				Stream<List<String>>	-> flatMap ->	Stream<String>
+				Stream<List<Object>>	-> flatMap ->	Stream<Object>
+			
+			How flatMap() works :
+				{ {1,2}, {3,4}, {5,6} } -> flatMap -> {1,2,3,4,5,6}
+				{ {'a','b'}, {'c','d'}, {'e','f'} } -> flatMap -> {'a','b','c','d','e','f'}
+			
+			EX:
+			import static java.util.stream.Collectors.*;
+			
 			List<String> words = Arrays.asList("Goodbye", "World");	
 			List<String> uniqueCharacters = words
 				.stream()
@@ -271,11 +328,161 @@ Package java.util.function
 				.flatMap(Arrays::stream)	// flatten each generated stream into a single stream				
 				.distinct()
 				.collect(toList());
-			 		
+			
+			EX:
+			// combine two lists.
+			// first combine two lists into a stream [using flatMap] and then collecting it into a list [Collectors.toList()].
+			Stream<String> combinedStream = Stream.of(collectionA, collectionB)
+			  .flatMap(Collection::stream);
+			Collection<String> collectionCombined = 
+			  combinedStream.collect(Collectors.toList());
+								
+	 		EX: // Stream<List<String>>	-> flatMap ->	Stream<String>
+	 		import static java.util.stream.Collectors.*;
+	 		public class Student {
+			    private String name;
+			    private Set<String> book;
+			
+			    public void addBook(String book) {
+			        if (this.book == null) {
+			            this.book = new HashSet<>();
+			        }
+			        this.book.add(book);
+			    }
+			    //getters and setters
+			    // getBook()			
+			}
+			--- main()
+	 		Student obj1 = new Student();
+	        obj1.setName("mkyong");
+	        obj1.addBook("Java 8 in Action");
+	        obj1.addBook("Spring Boot in Action");
+	        obj1.addBook("Effective Java (2nd Edition)");
+	
+	        Student obj2 = new Student();
+	        obj2.setName("zilap");
+	        obj2.addBook("Learning Python, 5th Edition");
+	        obj2.addBook("Effective Java (2nd Edition)");
+	
+	        List<Student> list = new ArrayList<>();
+	        list.add(obj1);
+	        list.add(obj2);
+			
+			//import static java.util.stream.Collectors.*;
+	        List<String> collect =
+	                list.stream()
+	                        .map(x -> x.getBook())      //Stream<Set<String>>
+	                        .flatMap(x -> x.stream())   //Stream<String>
+	                        .distinct()
+	                        .collect(Collectors.toList());
+	
+	        collect.forEach(x -> System.out.println(x));
+	 		
+	 		EX:
+	 		int[] intArray = {1, 2, 3, 4, 5, 6};
+	        //1. Stream<int[]>
+	        Stream<int[]> streamArray = Stream.of(intArray);	
+	        //2. Stream<int[]> -> flatMap -> IntStream
+	        IntStream intStream = streamArray.flatMapToInt(x -> Arrays.stream(x));	
+	        intStream.forEach(x -> System.out.println(x));
 	 		
 	 		
 	 		
-	 		
+	[concat]
+			// combine two lists
+			Stream<String> combinedStream = Stream.concat(
+												  collectionA.stream(),
+												  collectionB.stream()
+												  );
+			// combine multiple lists									  
+			Stream<String> combinedStream = Stream.concat(
+												  Stream.concat(collectionA.stream(), collectionB.stream()), 
+												  collectionC.stream()
+												  );
+														   		
+	[IntStream]	 		
+			IntStream intStream = IntStream.range(1, 5);
+			
+			
+	[anyMatch]..
+	[allMatch]..
+	[nonMatch].. returns boolean
+			if(menu.stream().anyMatch(Dish::isVegetarian)) {
+				System.out.println("The menu is (somewhat) vegetarian friendly!!");
+			}
+			..
+			boolean isHealthy = menu.stream()
+									.allMatch(dish -> dish.getCalories() < 1000);
+			..
+			boolean isHealthy = menu.stream()
+									.noneMatch(d -> d.getCalories() >= 1000);
+			
+			
+	[findAny]... returns Optional
+			Optional<Dish> dish =
+					menu.stream()
+					.filter(Dish::isVegetarian)
+					.findAny();
+
+			OR
+			menu.stream()
+				.filter(Dish::isVegetarian)
+				.findAny()	//<======================================== returns Optional<Dish>
+				.ifPresent(dish -> System.out.println(dish.getName());
+
+	[findFirst]
+			// for example, the code that follows, given a list of numbers, 
+			// finds the first square that’s divisible by 3):
+			// Returns an Optional<Dish>. If a value is contained,
+			// it’s printed; otherwise
+			// nothing happens.
+			
+				List<Integer> someNumbers = Arrays.asList(1, 2, 3, 4, 5);
+				Optional<Integer> firstSquareDivisibleByThree =
+						someNumbers.stream()
+									.map(n -> n * n)
+									.filter(n -> n % 3
+
+	[reduce]
+	[Integer::sum]
+	[Integer::max]
+	[Integer::min]
+		
+			// a stream is reduced to a value
+			EX: sum all elements and preduce a new value
+				0: is the initial value
+				(a, b) -> a + b : BinaryOperator<T> to combine two elements
+			int sum = numbers.stream().reduce(0, (a, b) -> a + b);
+			{4,5,3,9}==21
+			
+			OR 
+			int sum = numbers.stream().reduce(0, Integer::sum);
+			
+			OR
+			// NO INITIAL VALUE, will return Optional<Integer>
+			Optional<Integer> sum = numbers.stream().reduce((a, b) -> (a + b));
+			..	
+			
+			EX: multiply all elements
+			int product = numbers.stream().reduce(1, (a, b) -> a * b);
+			.
+			
+			Optional<Integer> max = numbers.stream().reduce(Integer::max);
+			..
+			
+			Optional<Integer> min = numbers.stream().reduce(Integer::min);
+			OR
+			Optional<Integer> min = numbers.stream().reduce((x, y) -> x < y ? x : y);
+			..				
+			
+	[sorted]
+			transactions.stream()
+					.filter(t -> t.getYear() == 2011)
+					.sorted(comparing(Transaction::getValue))
+					.forEach(System.out::println);	
+					
+					
+						 		
 
 ---------------------------------------------------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------------------------------------
@@ -345,6 +552,7 @@ Runnable..run()......................... () -> void..... Thread t = new Thread( 
 ---------------------------
 ---------------------------
 // Split up the array of whole names into an array of first/last names
+import static java.util.stream.Collectors.*;
 List<Object[]> splitUpNames = Arrays.asList("John Woo", "Jeff Dean", "Josh Bloch", "Josh Long").stream()
 		.map(name -> name.split(" "))
 		.collect(Collectors.toList());
@@ -522,12 +730,18 @@ Topic topic = topics.stream().filter(e -> e.getId().equalsIgnoreCase(id)).findFi
 			
 
 ==================================================================================================
->http://www.baeldung.com/java-8-interview-questions
-
 >[optionals]
 
-	package com.zak.optionals;
+	menu.stream()
+		.filter(Dish::isVegetarian)
+		.findAny() //<========================================== returns Optional<Dish>
+		.ifPresent(dish -> System.out.println(dish.getName());
 
+	[.isPresent()]
+	[.ifPresent(execute this block if true)]
+	[.get()]
+	[.orElse()]
+	
 
 
 ==================================================================================================

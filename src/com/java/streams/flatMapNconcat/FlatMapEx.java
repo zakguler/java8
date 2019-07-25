@@ -1,4 +1,4 @@
-package com.java.streams.flatMap;
+package com.java.streams.flatMapNconcat;
 
 import java.util.Arrays;
 import java.util.List;
@@ -7,6 +7,10 @@ import static java.util.stream.Collectors.toList;;
 public class FlatMapEx {
 
 	public static void main(String...args) {
+		
+//		Stream<String> combinedStream = Stream.concat(
+//				  Stream.concat(collectionA.stream(), collectionB.stream()), 
+//				  collectionC.stream());
 		
 		List<String> words = Arrays.asList("Goodbye", "World");
 		

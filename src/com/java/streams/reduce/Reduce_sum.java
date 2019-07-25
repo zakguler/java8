@@ -1,4 +1,4 @@
-package com.java.test2;
+package com.java.streams.reduce;
 
 import static java.util.stream.Collectors.toList;
 
@@ -9,7 +9,7 @@ import java.util.Optional;
 
 import com.java.Common_MODELS.Dish;
 
-public class T {
+public class Reduce_sum {
 
 	static List<Dish> specialMenu = Arrays.asList(
 			new Dish("seasonal fruit", true, 120, Dish.Type.OTHER),
@@ -24,8 +24,11 @@ public class T {
 				.stream()
 				.map(d -> 1)
 				.reduce(Integer::sum);
+		
 		System.out.println("# od Dishes: " + ds.get());
 			
+		// same as [specialMenu.stream().count()]
+		System.out.println("another way: " + specialMenu.stream().count());
 	}
 	
 }
