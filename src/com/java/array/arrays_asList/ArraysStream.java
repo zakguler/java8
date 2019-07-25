@@ -1,11 +1,11 @@
-package com.java.streams.general;
+package com.java.array.arrays_asList;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class Examples {
+public class ArraysStream {
 	public static void main(String[] args) {
 		
 		//---

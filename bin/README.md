@@ -197,11 +197,24 @@ Package java.util.function
 ---------------------------
 ---------------------------
 
--Stream.concat( Stream()a, Stream(b) )
-	
+-Stream.concat( Stream(a), Stream(b) )	// also you can use flatMap(): search for an example..
+-Stream.of(n1, n2).flatMap(Collection::stream);
+-
 -collection.stream()	
--Arrays.stream(arr)
 -Arrays.asList("a", "b", "c");
+
+
+
+-Building streams:
+[Stream.of()]=============================== Stream<String> s = Stream.of("Modern ", "Java ", "In ", "Action");
+[Stream.empty()]============================ Stream<String> emptyStream = Stream.empty();	// get an empty stream
+[Stream.ofNullable()]======[Java9]========== Stream<String> homeValueStream = Stream.ofNullable(System.getProperty("home"));
+[Arrays.stream()]=========================== int sum = Arrays.stream( {2, 3, 5, 7, 11, 13} ).sum();
+[from a List]=============================== List<String> l2 = Arrays.asList("a", "b", "c"); Stream<String> streamL2 = l2.stream();
+[from a Collection]========================= Collection<String> collection = Arrays.asList("a", "b", "c"); Stream<String> streamOfCollection = collection.stream();
+[from a file]=============================== try (Stream<String> lines = Files.lines(Paths.get("data.txt"), Charset.defaultCharset())) {....}
+[Stream.iterate()] [infinite stream]======== Stream.iterate(0, n -> n + 2).limit(10).forEach(System.out::println);
+[Stream.generate()] [infinite stream]======= 
 
 
 .stream()
@@ -274,8 +287,9 @@ Package java.util.function
 			
 			.findFirst()
 			.findAny()
-			.findEach			
+			.findEach()			
 			
+	---------------------------------- 	
 	---------------------------------- 	
 	[.distinct]
 		List<Integer> numbers = Arrays.asList(1, 2, 1, 3, 3, 2, 4);
@@ -302,6 +316,50 @@ Package java.util.function
 				.limit(2)
 				.collect(toList());
 
+
+	[map]
+	[mapToInt]
+	[mapToDouble]
+	[mapToLong]
+	
+			.map(Transaction::getValue);
+			..
+			
+			int calories = menu.stream()
+								.mapToInt(Dish::getCalories)
+								.sum();
+			..
+			
+	
+	[OptionalInt]
+	[OptionalDouble]
+	[OptionalLong]
+	
+			OptionalInt maxCalories = menu.stream()
+											.mapToInt(Dish::getCalories)
+											.max();
+			int max = maxCalories.orElse(1);	<============================= // if no elements, set default value to 1
+			
+
+
+	[IntStream]
+	[DoubleStream]
+	[LongStream]
+		
+			-supports: .sum .min .max .average  .rang .rangClosed
+				
+			IntStream intStream = IntStream.range(1, 100);			// exclusive [1-99] [100 not included]
+			IntStream intStream = IntStream.rangeClosed(1, 100)		// inclusive [1-100][100 is included]
+										   .filter(n -> n%2 == 0);
+			
+			
+			// converting back to a stream of Objects [int -> Integer]
+			IntStream intStream = menu.stream().mapToInt(Dish::getCalories);
+			Stream<Integer> stream = intStream.boxed();
+	
+	
+			
+			
 	[flatmap]
 	[flatMapToInt]	
 	
@@ -399,10 +457,8 @@ Package java.util.function
 												  Stream.concat(collectionA.stream(), collectionB.stream()), 
 												  collectionC.stream()
 												  );
+	
 														   		
-	[IntStream]	 		
-			IntStream intStream = IntStream.range(1, 5);
-			
 			
 	[anyMatch]..
 	[allMatch]..

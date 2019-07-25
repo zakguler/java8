@@ -5,6 +5,7 @@ import static java.util.stream.Collectors.*;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 public class AllStreamsExample {
@@ -94,7 +95,35 @@ public class AllStreamsExample {
 		//----------	
 		System.out.println("==================================================================================");
 		System.out.println("6 Print the values of all transactions from the traders living in Cambridge");
+		transactions.stream()
+					.filter(t -> t.getTrader().getCity().equalsIgnoreCase("Cambridge"))
+					.map(Transaction::getValue)
+					.forEach(System.out::println);
+
 		
+		//----------	
+		System.out.println("==================================================================================");
+		System.out.println("7 What’s the highest value of all the transactions?");
+		Optional<Integer> vMax = transactions.stream()
+										  .map(Transaction::getValue)
+										  .reduce(Integer::max);
+		System.out.println(vMax.get());
+
+		
+		//----------	
+		System.out.println("==================================================================================");
+		System.out.println("8 Find the transaction with the smallest value.");
+		Optional<Integer> vMin = transactions.stream()
+				  .map(Transaction::getValue)
+				  .reduce(Integer::min);
+		System.out.println(vMin.get());
+		//OR
+		Optional<Integer> vMin2 = transactions.stream()
+				  .reduce( (t1, t2) -> t1.getValue() < t2.getValue() ? t1 : t2 )
+				  .map(Transaction::getValue);
+		System.out.println(vMin2.get());
+		
+
 		
 	}
 
