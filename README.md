@@ -199,10 +199,11 @@ Package java.util.function
 
 -Stream.concat( Stream(a), Stream(b) )	// also you can use flatMap(): search for an example..
 -Stream.of(n1, n2).flatMap(Collection::stream);
--
--collection.stream()	
+	
 -Arrays.asList("a", "b", "c");
+-static List<Dish> specialMenu = Arrays.asList( new Dish("seasonal fruit", true, 120, Dish.Type.OTHER), new Dish("prawns", false, 300, Dish.Type.FISH));
 
+-Stream<String> streamOfWords = Arrays.stream( {"GoodBye", "World"} );
 
 
 -Building streams:
@@ -213,8 +214,12 @@ Package java.util.function
 [from a List]=============================== List<String> l2 = Arrays.asList("a", "b", "c"); Stream<String> streamL2 = l2.stream();
 [from a Collection]========================= Collection<String> collection = Arrays.asList("a", "b", "c"); Stream<String> streamOfCollection = collection.stream();
 [from a file]=============================== try (Stream<String> lines = Files.lines(Paths.get("data.txt"), Charset.defaultCharset())) {....}
-[Stream.iterate()] [infinite stream]======== Stream.iterate(0, n -> n + 2).limit(10).forEach(System.out::println);
-[Stream.generate()] [infinite stream]======= 
+
+[Stream.iterate(x,y)] [infinite stream]======== Stream.iterate(0, n -> n + 2).limit(10).forEach(System.out::println);
+
+[j9][IntStream.iterate(x,y,z)]============== IntStream.iterate(0, n -> n < 100, n -> n + 4)	//<=== (starting, predicate, lambda function)
+													  .forEach(System.out::println);
+[Stream.generate()] [infinite stream]======= ???
 
 
 .stream()
@@ -224,16 +229,11 @@ Package java.util.function
 	
 	-generating a stream from an ordered collection preserves the ordering.
 
-
-	-Stream<String> streamOfWords = Arrays.stream( {"GoodBye", "World"} );
-
-
-	-static List<Dish> specialMenu = Arrays.asList( new Dish("seasonal fruit", true, 120, Dish.Type.OTHER), new Dish("prawns", false, 300, Dish.Type.FISH));
-
 	-Stateless vs stateful
 			stateless:
 				.map
 				.filter
+				..
 				
 			stateful:
 				.reduce		[bounded]
@@ -241,11 +241,9 @@ Package java.util.function
 				.distict 	[unbounded]
 				.skip 		[bounded]
 				.limit		[bounded]
+				..
 				
 				
-				
-			
-
 	-intermediate and terminal operations
 	
 	-[lazy] intermediate operations: <====== return another stream 
@@ -253,12 +251,12 @@ Package java.util.function
 			.filter [T -> boolean]
 			.sorted [(T, T) -> int]
 			.distinct [lazy]???
-			
-			
+						
 			.map() [short-circuiting] [T -> R] <==== function to create a new version of... [NOT modifying]
 			.map()	<======================= you can use multiple map(s), filter(s) ..
 			.flatmap <====================== combine multiple maps into one Stream<string[]>'s to Stream<String>
 			.concat(Stream<? extends T> a, Stream<? extends T> b)()
+			
 			.limit()
 			.skip()	<======================= discards the first (n) elements.
 			.build()
@@ -272,12 +270,11 @@ Package java.util.function
 	-terminal operations:	<=============== result in any non-stream value [ex: list, Integer, void...]
 			import static java.util.stream.Collectors.*;
 			.collect
-				(Collectors..toList()
-				(Collectors..toSet()
-				(Collectors..joining(",")
-				(Collectors..groupingBy(Person::getCity)
-				
-				
+				(Collectors.toList()
+				(Collectors.toSet()
+				(Collectors.joining(",")
+				(Collectors.groupingBy(Person::getCity)
+					
 			.forEach
 			.count
 			.allMatch
