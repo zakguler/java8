@@ -1,6 +1,5 @@
 module java_examples {
 	exports com.java.collections.mapList;
-	exports com.java.streams.collect_collectors_grouping_2;
 	exports com.java.streams.LazyStream;
 	exports com.java.streams.collect_collectors_grouping;
 	exports com.java.streams.streambuilder;
