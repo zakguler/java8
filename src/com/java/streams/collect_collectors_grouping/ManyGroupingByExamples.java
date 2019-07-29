@@ -1,4 +1,4 @@
-package com.java.streams.collector_grouping_2;
+package com.java.streams.collect_collectors_grouping;
 
 import java.util.Arrays;
 import java.util.List;
@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 import com.java.Common_MODELS.EmployeeSimple;
  
-public class TestGroupingWithCollectors {
+public class ManyGroupingByExamples {
 	
   static List<EmployeeSimple> employeeList = Arrays.asList(
       new EmployeeSimple("3333","Tom Jones", 6),

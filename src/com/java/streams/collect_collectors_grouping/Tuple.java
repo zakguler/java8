@@ -1,4 +1,4 @@
-package com.java.streams.collector_grouping;
+package com.java.streams.collect_collectors_grouping;
 
 
 public class Tuple {

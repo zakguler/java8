@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.java.Common_MODELS.Employee;
-import com.java.streams.collector_grouping.Department;
+import com.java.streams.collect_collectors_grouping.Department;
 
 // Functional programming: using Predicate
 

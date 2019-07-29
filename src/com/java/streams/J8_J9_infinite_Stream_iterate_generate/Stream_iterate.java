@@ -1,4 +1,4 @@
-package com.java.streams.J8_J9_infiniteStream;
+package com.java.streams.J8_J9_infinite_Stream_iterate_generate;
 
 import java.util.stream.IntStream;
 import java.util.stream.Stream;

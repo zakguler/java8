@@ -219,7 +219,7 @@ Package java.util.function
 
 [j9][IntStream.iterate(x,y,z)]============== IntStream.iterate(0, n -> n < 100, n -> n + 4)	//<=== (starting, predicate, lambda function)
 													  .forEach(System.out::println);
-[Stream.generate()] [infinite stream]======= ???
+[Stream.generate()] [infinite stream]======= Stream.generate(() -> Double.toString(Math.random() * 1000)).limit(10);
 
 
 .stream()
@@ -272,7 +272,12 @@ Package java.util.function
 			.collect
 				(Collectors.toList()
 				(Collectors.toSet()
+				(Collectors.counting()
+				(Collectors.maxBy(Comparator<T>)
+				(Collectors.minBy(Comparator<T>)
+				(Collectors.summingInt()
 				(Collectors.joining(",")
+				(Collectors.reducing(x,y,z)
 				(Collectors.groupingBy(Person::getCity)
 					
 			.forEach
@@ -331,6 +336,9 @@ Package java.util.function
 	[OptionalInt]
 	[OptionalDouble]
 	[OptionalLong]
+		.get()
+		.orElse()
+		.orElseGet()
 	
 			OptionalInt maxCalories = menu.stream()
 											.mapToInt(Dish::getCalories)
@@ -497,9 +505,9 @@ Package java.util.function
 									.filter(n -> n % 3
 
 	[reduce]
-	[Integer::sum]
-	[Integer::max]
-	[Integer::min]
+		[Integer::sum]
+		[Integer::max]
+		[Integer::min]
 		
 			// a stream is reduced to a value
 			EX: sum all elements and preduce a new value
@@ -528,6 +536,7 @@ Package java.util.function
 			Optional<Integer> min = numbers.stream().reduce((x, y) -> x < y ? x : y);
 			..				
 			
+			
 	[sorted]
 			transactions.stream()
 					.filter(t -> t.getYear() == 2011)
@@ -535,6 +544,80 @@ Package java.util.function
 					.forEach(System.out::println);	
 					
 					
+		
+	[collect()]	
+		import java.util.stream.Collectors;
+		
+		[Collectors.toList()]
+			List<Transaction> transactions = transactionStream
+												.collect(Collectors.toList());
+		
+		[Collectors.counting()]		
+			long howManyDishes = menu.stream().collect(Collectors.counting());	// menu.stream().count();								
+	
+		[Collectors.maxBy()]
+		[Collectors.minBy()]
+			Comparator<Dish> dishCaloriesComparator = Comparator.comparingInt(Dish::getCalories);
+			Optional<Dish> mostCalorieDish = menu.stream()
+												 .collect(maxBy(dishCaloriesComparator));
+
+			
+		[Collectors.summingInt()]
+		[Collectors.summingDouble()]
+		[collecters.averagingInt()]
+		[collecters.averagingLong()]
+		[collecters.averagingDouble()]
+		[collecters.summarizingInt()]
+			int totalCalories = menu.stream().collect(summingInt(Dish::getCalories));
+			double totalCalories = menu.stream().collect(summingDouble(Dish::getCalories));
+			double avgCalories = menu.stream().collect(averagingInt(Dish::getCalories));
+			IntSummaryStatistics menuStatistics = menu.stream().collect(summarizingInt(Dish::getCalories));
+			LongSummaryStatistics..
+			DoubleSummaryStatistics..
+			
+		[collecters.joining()]	... default 'space'
+		[collecters.joining(", ")]
+			String shortMenu = menu.stream().map(Dish::getName).collect(joining());
+	    	String shortMenu2 = menu.stream().map(Dish::getName).collect(joining(", "));
+		
+		
+		[collecters.reducing(x,y,z)]
+			int totalCalories0 = menu.stream().collect(
+	    		reducing(0,			//....................... initial value
+	    		Dish::getCalories,	//....................... transformation function
+	    		Integer::sum));		//....................... aggregating function
+			
+			int totalCalories2 = menu.stream().collect(reducing( 0, Dish::getCalories, (i, j) -> i + j) );
+			Optional<Dish> mostCalorieDish2 = menu.stream().collect(reducing( (d1, d2) -> d1.getCalories() > d2.getCalories() ? d1 : d2) );
+			
+			
+		[(Collectors.groupingBy()]
+		[groupingByConcurrent()] same as above
+		
+			[Map] toList
+					Map<Department,List<Employee>> employeeMap = 
+						employeeList.stream()
+						.collect(Collectors.groupingBy(Employee::getDepartment));
+						System.out.println("Employees grouped by department");
+						employeeMap.forEach((Department key, List<Employee> empList) -> System.out.println(key +" -> "+empList));					
+					}
+
+			[Map] toSet
+					Map<Department,Set<Employee>> employeeMap2 = 
+							employeeList.stream()
+							.collect(Collectors.groupingBy(Employee::getDepartment, Collectors.toSet()));
+					System.out.println("Employees grouped by department");
+					employeeMap2.forEach((Department key, Set<Employee> empSet) -> System.out.println(key +" -> "+empSet));
+
+
+			[Map] [new TreeMap type]  toSet			
+					Map<Department,Set<Employee>> employeeMap5
+							= employeeList.stream()
+							.collect(Collectors.groupingBy(Employee::getDepartment, TreeMap::new, Collectors.toSet()));
+						  employeeMap5.forEach((Department key, Set<Employee> empSet) -> System.out.println(key +" -> "+empSet));
+
+						  
+
 						 		
 
 ---------------------------------------------------------------------------------------------------------------------------------------------
@@ -720,40 +803,6 @@ Topic topic = topics.stream().filter(e -> e.getId().equalsIgnoreCase(id)).findFi
 			
 ==================================================================================================
 			
-			
-[.collect(Collectors.groupingBy()]
-		[Map] toList
-					Map<Department,List<Employee>> employeeMap = 
-						employeeList.stream()
-						.collect(Collectors.groupingBy(Employee::getDepartment));
-					
-						System.out.println("Employees grouped by department");
-						
-						employeeMap.forEach((Department key, List<Employee> empList) -> System.out.println(key +" -> "+empList));
-					
-					}
-
-		---
-		[Map] toSet
-					Map<Department,Set<Employee>> employeeMap2 = 
-							employeeList.stream()
-							.collect(Collectors.groupingBy(Employee::getDepartment, Collectors.toSet()));
-						
-					System.out.println("Employees grouped by department");
-					  
-					employeeMap2.forEach((Department key, Set<Employee> empSet) -> System.out.println(key +" -> "+empSet));
-
-		---
-		[Map] [new TreeMap type]  toSet			
-					Map<Department,Set<Employee>> employeeMap5
-							= employeeList.stream()
-							.collect(Collectors.groupingBy(Employee::getDepartment, TreeMap::new, Collectors.toSet()));
-						  employeeMap5.forEach((Department key, Set<Employee> empSet) -> System.out.println(key +" -> "+empSet));
-
-						  
-		---
-		[groupingByConcurrent()] same as above
-
 ==================================================================================================
 [List][list.removeIf(true/false predicate)]
 
