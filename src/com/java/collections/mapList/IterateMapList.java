@@ -44,8 +44,7 @@ public class IterateMapList {
 		map.forEach( (Integer k, List<User> v) -> {
 		    System.out.print(k + " = ");
 		    v.forEach(w -> System.out.print(w.getName() + ","));
-		    System.out.println();
-			
+		    System.out.println();			
 		});
 		
 	}

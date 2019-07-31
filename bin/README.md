@@ -279,6 +279,13 @@ Package java.util.function
 				(Collectors.joining(",")
 				(Collectors.reducing(x,y,z)
 				(Collectors.groupingBy(Person::getCity)
+				(Collectors.groupingBy(..lambda..)
+				
+				(Collectors.groupingBy(Dish::getType,
+						  				Collectors.filtering(dish -> dish.getCalories() > 500, Collectors.toList())
+						  			  ));
+				(Collectors.groupingBy(Dish::getType,
+						   				Collectors .flatMapping(dish -> dishTags.get( dish.getName() ) .stream(), Collectors.toSet())));		  			  
 					
 			.forEach
 			.count
@@ -594,6 +601,21 @@ Package java.util.function
 		[(Collectors.groupingBy()]
 		[groupingByConcurrent()] same as above
 		
+			[Map] [:: method reference]
+					Map<Dish.Type, List<Dish>> dishesByType =
+							menu.stream().collect(groupingBy(Dish::getType));
+
+			[Map] [..lambda..]
+					public enum CaloricLevel { DIET, NORMAL, FAT };
+					Map<CaloricLevel, List<Dish>> dishesByCaloricLevel = 
+						menu.stream().collect( groupingBy(dish -> {
+															if (dish.getCalories() <= 400) return CaloricLevel.DIET;
+															else if (dish.getCalories() <= 700) return CaloricLevel.NORMAL;
+																else return CaloricLevel.FAT;
+																	} 
+														 )
+											 );
+
 			[Map] toList
 					Map<Department,List<Employee>> employeeMap = 
 						employeeList.stream()
@@ -616,8 +638,14 @@ Package java.util.function
 							.collect(Collectors.groupingBy(Employee::getDepartment, TreeMap::new, Collectors.toSet()));
 						  employeeMap5.forEach((Department key, Set<Employee> empSet) -> System.out.println(key +" -> "+empSet));
 
-						  
-
+			[Map] filtering... toList		  
+					Map<Dish.Type, List<Dish>> caloricDishesByType2 =
+						  menu.stream()
+						  	  .collect(Collectors.groupingBy(Dish::getType,
+						  			   Collectors.filtering(dish -> dish.getCalories() > 500, Collectors.toList())
+						  			  ));
+						 
+						 
 						 		
 
 ---------------------------------------------------------------------------------------------------------------------------------------------
