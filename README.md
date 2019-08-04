@@ -198,29 +198,39 @@ Package java.util.function
 ---------------------------
 
 -Stream.concat( Stream(a), Stream(b) )	// also you can use flatMap(): search for an example..
+-Stream.of(l1, l2)
 -Stream.of(n1, n2).flatMap(Collection::stream);
 	
 -Arrays.asList("a", "b", "c");
 -static List<Dish> specialMenu = Arrays.asList( new Dish("seasonal fruit", true, 120, Dish.Type.OTHER), new Dish("prawns", false, 300, Dish.Type.FISH));
-
 -Stream<String> streamOfWords = Arrays.stream( {"GoodBye", "World"} );
 
 
--Building streams:
-[Stream.of()]=============================== Stream<String> s = Stream.of("Modern ", "Java ", "In ", "Action");
-[Stream.empty()]============================ Stream<String> emptyStream = Stream.empty();	// get an empty stream
-[Stream.ofNullable()]======[Java9]========== Stream<String> homeValueStream = Stream.ofNullable(System.getProperty("home"));
-[Arrays.stream()]=========================== int sum = Arrays.stream( {2, 3, 5, 7, 11, 13} ).sum();
-[from a List]=============================== List<String> l2 = Arrays.asList("a", "b", "c"); Stream<String> streamL2 = l2.stream();
-[from a Collection]========================= Collection<String> collection = Arrays.asList("a", "b", "c"); Stream<String> streamOfCollection = collection.stream();
-[from a file]=============================== try (Stream<String> lines = Files.lines(Paths.get("data.txt"), Charset.defaultCharset())) {....}
-
-[Stream.iterate(x,y)] [infinite stream]======== Stream.iterate(0, n -> n + 2).limit(10).forEach(System.out::println);
-
-[j9][IntStream.iterate(x,y,z)]============== IntStream.iterate(0, n -> n < 100, n -> n + 4)	//<=== (starting, predicate, lambda function)
-													  .forEach(System.out::println);
-[Stream.generate()] [infinite stream]======= Stream.generate(() -> Double.toString(Math.random() * 1000)).limit(10);
-
+-Building streams [summary]:
+	
+	[Stream.of()]=============================== Stream<String> s = Stream.of("Modern ", "Java ", "In ", "Action");
+	[Stream.empty()]============================ Stream<String> emptyStream = Stream.empty();	// get an empty stream
+	[Stream.ofNullable()]======[Java9]========== Stream<String> homeValueStream = Stream.ofNullable(System.getProperty("home"));
+	[Arrays.stream()]=========================== int sum = Arrays.stream( {2, 3, 5, 7, 11, 13} ).sum();
+	[l2.stream()][from a List]================== List<String> l2 = Arrays.asList("a", "b", "c"); Stream<String> streamL2 = l2.stream();
+	[coll.stream()][from a Collection]========== Collection<String> collection = Arrays.asList("a", "b", "c"); Stream<String> streamOfCollection = collection.stream();
+	[from a file]=============================== try (Stream<String> lines = Files.lines(Paths.get("data.txt"), Charset.defaultCharset())) {....}
+	
+	[map.entrySet().stream()][from a map]======= Set<Map.Entry<String, Integer>> entries = someMap.entrySet();
+												 Stream<Map.Entry<String, Integer>> entriesStream = entries.stream();
+	
+	[map.keySet().stream][from a map..key]====== Set<String> keySet = someMap.keySet();
+												 Stream<String> keysStream = keySet.stream();
+					
+	[map.values().stream][from a map..value]==== Collection<Integer> values = someMap.values();
+												 Stream<Integer> valuesStream = values.stream();
+												 
+	[Stream.iterate(x,y)] [infinite stream]===== Stream.iterate(0, n -> n + 2).limit(10).forEach(System.out::println);
+	
+	[j9][IntStream.iterate(x,y,z)]============== IntStream.iterate(0, n -> n < 100, n -> n + 4)	//<=== (starting, predicate, lambda function)
+														  .forEach(System.out::println);
+	[Stream.generate()] [infinite stream]======= Stream.generate(() -> Double.toString(Math.random() * 1000)).limit(10);
+	
 
 .stream()
 .parallelStream()
@@ -254,7 +264,13 @@ Package java.util.function
 						
 			.map() [short-circuiting] [T -> R] <==== function to create a new version of... [NOT modifying]
 			.map()	<======================= you can use multiple map(s), filter(s) ..
+			.mapToInt()
+			.mapToLong()
+			.mapToDouble()
 			.flatmap <====================== combine multiple maps into one Stream<string[]>'s to Stream<String>
+			.flatMapToInt
+			.flatMapToLong
+			.flatMapToDouble
 			.concat(Stream<? extends T> a, Stream<? extends T> b)()
 			
 			.limit()
@@ -379,7 +395,7 @@ Package java.util.function
 			so, we need flatMap() to do the following conversion :
 			
 				Stream<String[]>		-> flatMap ->	Stream<String>
-				Stream<Set<String>>	-> flatMap ->	Stream<String>
+				Stream<Set<String>>		-> flatMap ->	Stream<String>
 				Stream<List<String>>	-> flatMap ->	Stream<String>
 				Stream<List<Object>>	-> flatMap ->	Stream<Object>
 			
@@ -395,7 +411,7 @@ Package java.util.function
 				.stream()
 				.map(word -> word.split(""))	// convert each word into an array of its individual letters
 												// each word => String[] of letters
-				.flatMap(Arrays::stream)	// flatten each generated stream into a single stream				
+				.flatMap(Arrays::stream)		// flatten each generated stream into a single stream				
 				.distinct()
 				.collect(toList());
 			
@@ -403,9 +419,10 @@ Package java.util.function
 			// combine two lists.
 			// first combine two lists into a stream [using flatMap] and then collecting it into a list [Collectors.toList()].
 			Stream<String> combinedStream = Stream.of(collectionA, collectionB)
-			  .flatMap(Collection::stream);
+			  										.flatMap(Collection::stream);
 			Collection<String> collectionCombined = 
 			  combinedStream.collect(Collectors.toList());
+								
 								
 	 		EX: // Stream<List<String>>	-> flatMap ->	Stream<String>
 	 		import static java.util.stream.Collectors.*;
@@ -456,6 +473,12 @@ Package java.util.function
 	        IntStream intStream = streamArray.flatMapToInt(x -> Arrays.stream(x));	
 	        intStream.forEach(x -> System.out.println(x));
 	 		
+	 		
+	 		EX:
+	 		List<String> betterLetters = Stream.of(l1, l2)
+				.flatMap(List::stream)
+				.map(String::toUpperCase)
+				.collect(Collectors.toList());
 	 		
 	 		
 	[concat]
@@ -786,6 +809,7 @@ Topic topic = topics.stream().filter(e -> e.getId().equalsIgnoreCase(id)).findFi
 [map.put()]
 [map.merge()]
 [map.replaceAll()]
+[map.entrySet().stream()]
 
 
 		[sort] the list	
@@ -828,6 +852,77 @@ Topic topic = topics.stream().filter(e -> e.getId().equalsIgnoreCase(id)).findFi
 					//		map.replaceAll((key, val) -> zGetUpdatedListFor(key)); 
 
 
+					System.out.println("8=================================");
+					[map.entrySet().stream()]
+					
+					Map<String, String> books = new HashMap<>();
+					books.put("978-0201633610", "Design patterns : elements of reusable object-oriented software");
+					books.put("978-1617291999", "Java 8 in Action: Lambdas, Streams, and functional-style programming");
+					books.put("978-0134685991", "Effective Java");
+					books.put("978-0321356680", "Effective Java: Second Edition");
+			
+					Map<String, Integer> someMap = new HashMap<>();
+					
+					// These each give us an entry point to process those collections by obtaining streams from them:
+					// We can obtain a set of key-value pairs:
+					Set<Map.Entry<String, Integer>> entries = someMap.entrySet();
+					Stream<Map.Entry<String, Integer>> entriesStream = entries.stream();
+			
+					// We can also get the key set associated with the Map:
+					Set<String> keySet = someMap.keySet();
+					Stream<String> keysStream = keySet.stream();
+					
+					// Or we could work directly with the set of values:
+					Collection<Integer> values = someMap.values();
+					Stream<Integer> valuesStream = values.stream();
+					
+					
+					//..........................................................................
+					//-----------find the ISBN for the book with the title “Effective Java”.
+					System.out.println("........................................................");
+					
+					Optional<String> isbn = books.entrySet().stream()
+								.filter(e -> e.getValue().equalsIgnoreCase("Effective Java"))
+								.map(Map.Entry::getKey)
+								.findFirst();
+					System.out.println(isbn.get());
+					
+					//...
+					// if no book exists
+					Optional<String> optionalIsbn = books.entrySet().stream()
+							  .filter(e -> "Non Existent Title".equals(e.getValue()))
+							  .map(Map.Entry::getKey).findFirst();
+							 
+							//assertEquals(false, optionalIsbn.isPresent());
+					if (optionalIsbn.isPresent())
+						System.out.println(optionalIsbn.get());
+					else
+						System.out.println("not found...");
+					
+					//..........................................................................
+					//----------- add another book with the same title
+					//----------- look for all books that start with “Effective Java”
+					System.out.println("........................................................");
+					
+			//		books.put("978-0321356680", "Effective Java: Second Edition");
+					
+					List<String> l = books.entrySet().stream()
+							.filter(e  -> e.getValue().startsWith("Effective Java"))
+							.map(e -> e.getKey())
+							.collect(Collectors.toList());	
+					l.forEach(System.out::println);		
+			
+					//..........................................................................
+					//----------- find titles for which their ISBN start with “978-0”. 
+					System.out.println("........................................................");
+					List<String> l2 = books.entrySet().stream()
+							.filter(e -> e.getKey().startsWith("978-0"))
+							.map(e -> e.getValue())
+							.collect(Collectors.toList());
+					l2.forEach(System.out::println);		
+					
+
+					
 			
 ==================================================================================================
 			

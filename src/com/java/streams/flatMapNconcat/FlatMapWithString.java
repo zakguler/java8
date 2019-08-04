@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import static java.util.stream.Collectors.toList;;
 
-public class FlatMapEx {
+public class FlatMapWithString {
 
 	public static void main(String...args) {
 		

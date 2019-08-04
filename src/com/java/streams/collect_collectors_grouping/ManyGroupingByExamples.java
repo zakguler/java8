@@ -14,16 +14,7 @@ public class ManyGroupingByExamples {
 	
 	public enum CaloricLevel { DIET, NORMAL, FAT };
 	
-	static List<EmployeeSimple> employeeList = Arrays.asList(
-      new EmployeeSimple("3333","Tom Jones", 6),
-      new EmployeeSimple("1111","Harry Major", 7),
-      new EmployeeSimple("5555","Ethan Hardy", 6),
-      new EmployeeSimple("3333","Tom Jones", 4),
-      new EmployeeSimple("5555","Ethan Hardy", 4),
-      new EmployeeSimple("1111","Harry Major", 6),
-      new EmployeeSimple("3333","Tom Jones", 8),
-      new EmployeeSimple("3333","Tom Jones", 2));
-  
+	  
 	static List<Dish> menu = Arrays.asList(
 			new Dish("pork", false, 800, Dish.Type.MEAT),
 			new Dish("beef", false, 700, Dish.Type.MEAT),
@@ -35,7 +26,16 @@ public class ManyGroupingByExamples {
 			new Dish("prawns", false, 300, Dish.Type.FISH),
 			new Dish("salmon", false, 450, Dish.Type.FISH) );
 
-	
+		
+	static List<EmployeeSimple> employeeList = Arrays.asList(
+	      new EmployeeSimple("3333","Tom Jones", 6),
+	      new EmployeeSimple("1111","Harry Major", 7),
+	      new EmployeeSimple("5555","Ethan Hardy", 6),
+	      new EmployeeSimple("3333","Tom Jones", 4),
+	      new EmployeeSimple("5555","Ethan Hardy", 4),
+	      new EmployeeSimple("1111","Harry Major", 6),
+	      new EmployeeSimple("3333","Tom Jones", 8),
+	      new EmployeeSimple("3333","Tom Jones", 2));
 
   
   public static void main(String args[]){
