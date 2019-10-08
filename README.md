@@ -1,12 +1,28 @@
-# java 8,9,10 updates
+# java 8,9,10,11,12 updates
 -----------------------
 
--java 9: Modules and reactive programming toolkit. [synchronization/parallel programming]
 -java 11: new synchronous HTTP client library
 -Lambda: anonymous functions.
 -stream: let you manipulate collections of data in a declarative way. 
 
 
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------
+-java 9: Modules and reactive programming toolkit. [synchronization/parallel programming]
+	-right click on the project
+		-configure
+			-create module-info.java
+			
+	-Packing a Java Module as a Standalone Application
+	 You package a Java module into a standalone application using the jlink command which comes with the Java SDK. Here is how you package a Java module with jlink :
+		c:\>jlink
+
+	-exports com.java.collections.mapList;
+	
+	
+	
 ---------------------------------------------------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------------------------------------
