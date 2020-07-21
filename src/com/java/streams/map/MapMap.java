@@ -1,10 +1,11 @@
 package com.java.streams.map;
 
+import static java.util.stream.Collectors.toList;
+
 import java.util.Arrays;
 import java.util.List;
 
 import com.java.Common_MODELS.Dish;
-import static java.util.stream.Collectors.toList;
 
 // using multiple .map(s)
 public class MapMap {

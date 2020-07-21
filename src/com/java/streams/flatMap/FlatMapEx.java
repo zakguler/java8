@@ -1,8 +1,9 @@
 package com.java.streams.flatMap;
 
+import static java.util.stream.Collectors.toList;
+
 import java.util.Arrays;
-import java.util.List;
-import static java.util.stream.Collectors.toList;;
+import java.util.List;;
 
 public class FlatMapEx {
 

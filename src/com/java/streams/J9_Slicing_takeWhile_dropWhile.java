@@ -1,8 +1,9 @@
 package com.java.streams;
 
+import static java.util.stream.Collectors.toList;
+
 import java.util.Arrays;
 import java.util.List;
-import static java.util.stream.Collectors.toList;
 
 import com.java.Common_MODELS.Dish;
 

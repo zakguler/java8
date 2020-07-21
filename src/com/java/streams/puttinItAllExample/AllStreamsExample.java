@@ -1,7 +1,8 @@
 package com.java.streams.puttinItAllExample;
 
 import static java.util.Comparator.comparing;
-import static java.util.stream.Collectors.*;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toSet;
 
 import java.util.Arrays;
 import java.util.List;

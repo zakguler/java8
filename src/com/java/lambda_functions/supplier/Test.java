@@ -1,6 +1,7 @@
 package com.java.lambda_functions.supplier;
 
-import java.util.function.*;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class Test {
 
