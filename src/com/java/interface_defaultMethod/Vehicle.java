@@ -10,19 +10,19 @@ public interface Vehicle {
     
      
     static void static0() {
-        System.out.println("peep!");
+        System.out.println("peep!..static0()");
     }
 
     static void hoot0() {
-        System.out.println("peep!");
+        System.out.println("peep!..hoot0()");
     }
 
     default void hoot() {
-        System.out.println("peep!");
+        System.out.println("peep!..hoot()");
     }
 
     default void hoot2() {
-        System.out.println("peep!");
+        System.out.println("peep!..hoot2()");
     }
     
 }
