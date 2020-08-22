@@ -42,17 +42,18 @@ public class T {
 							+ " value(s): " + e.getValue());
 		});
 		  
-		//-----------------------------------------------------------------------------------------------------------------    
-		System.out.println("\n----2-Group by...");
-		listDishesByType.entrySet().stream()
-						.map(  e ->  	e.getKey() 
-										+ " " 
-										+ (e.getValue().stream()
-													  .map(z -> z.getName())
-													  .collect(Collectors.joining(",")))  
-							)
-						.forEach(System.out::println);
+//		//-----------------------------------------------------------------------------------------------------------------    
+//		System.out.println("\n----2-Group by...");
+//		listDishesByType.entrySet().stream()
+//						.map(  e ->  	e.getKey() 
+//										+ " " 
+//										+ (e.getValue().stream()
+//													  .map(z -> z.getName())
+//													  .collect(Collectors.joining(","))) ;
+//						))
+//						.forEach(System.out::println);
 
+						
 		//-----------------------------------------------------------------------------------------------------------------    
 		System.out.println("\n----3-Group by...");
 		Map<CaloricLevel, List<Dish>> dishesByCaloricLevel = menu.stream().collect(
@@ -79,7 +80,6 @@ public class T {
 															.collect(Collectors.groupingBy(Dish::getType,
 																						   filtering(d -> d.getCalories() > 500, toList())
 																						   ));
-		
 		listDishesByType3.entrySet().stream()
 			.forEach(e -> {
 			System.out.println("e.getKey: " + e.getKey()

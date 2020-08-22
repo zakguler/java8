@@ -10,8 +10,9 @@ public class ConsumerTestZ {
  
         System.out.println("E.g. #1 - Java8 Consumer Example\n");
  
-        Consumer<String> consumerZ = ConsumerTestZ::printNames;
-        
+//        Consumer<String> consumerZ = ConsumerTestZ::printNames;
+        Consumer<String> consumerZ = c -> ConsumerTestZ.printNames(c);
+               
         consumerZ.accept("C++");
         consumerZ.accept("Java");
         consumerZ.accept("Python");

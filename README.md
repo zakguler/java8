@@ -1,61 +1,71 @@
-# java 8,9,10,11,12 updates
------------------------
 
--java 11: new synchronous HTTP client library
--Lambda: anonymous functions.
--stream: let you manipulate collections of data in a declarative way. 
+# Online markdown editor: http://markdown.pioul.fr/
+
+### java 8,9,10,11,12 updates
+
+- java 11: new synchronous HTTP client library
+- Lambda: anonymous functions.
+- stream: let you manipulate collections of data in a declarative way. 
 
 
 
 ---------------------------------------------------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------------------------------------
--java 9: Modules and reactive programming toolkit. [synchronization/parallel programming]
-	-right click on the project
-		-configure
-			-create module-info.java
+### java 9: Modules and reactive programming toolkit. [synchronization/parallel programming]
+- right click on the project
+		- configure
+			- create module-info.java
 			
-	-Packing a Java Module as a Standalone Application
-	 You package a Java module into a standalone application using the jlink command which comes with the Java SDK. Here is how you package a Java module with jlink :
+- Packing a Java Module as a Standalone Application
+	 You package a Java module into a standalone application using the jlink command which comes with the Java SDK. 
+- Here is how you package a Java module with jlink :
+```
 		c:\>jlink
-
-	-exports com.java.collections.mapList;
+```
+- exports com.java.collections.mapList;
 	
 	
 	
 ---------------------------------------------------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------------------------------------
-Functional Interfaces
+# Functional Interfaces
 
 you can use lambda expression in the context of a Functional Interface 
-								[ contains ONLY one abstract method].
-								[ there is one exception to the rule that only one abstract method is allowed - 
-								[ a functional interface can have another abstract methods if they are implemented by java.lang.Object, 
-								[ for example toString().]
+- contains ONLY one abstract method.
+- there is one exception to the rule that only one abstract method is allowed - 
+- a functional interface can have another abstract methods if they are implemented by java.lang.Object, 
+- for example toString().
+```
+ (parameters) -> expression
+ (parameters) -> {statements; }	<== Block style lambda 
+```
 
--(parameters) -> expression
--(parameters) -> {statements; }
-
-
-Package java.util.function
-
-	T: Object of generic type -first argument
-	U: type -second argument
-	L: ???
-	R: Object of generic type return/result
-	boolean: true/false
+- Package java.util.function
 
 
+### Functions
+
+- T: Object of generic type ***first argument***
+- U: type -second argument
+- L: ???
+- R: Object of generic type return/result
+- boolean: true/false
+```
+- Function Descriptor:
+ () -> void
+ (T, T) -> R 
+```
 	Function								 Functional descriptor
 	--------								 ----------------------
 	Comparator..compare()................... (T, T) -> R.... personList.sort( (Person p1, Person p2)  ->  p1.getSurName().compareTo(p2.getSurName()) );
 	Comparator..comparing()................. Comparator<Apple> c = Comparator.comparing(Apple::getWeight());
 	Comparable..compareTo().................
 
-
-	Predicate.
+### Predicate.
 		.test()............................. T -> boolean... List<String> strString = filter( listOfStrings, (String s) -> s.!s.isEmpty() );
+
 		.isEqual()
 		.and().............................. boolean outcome2 = nonNullPredicate.and(hasLengthOf10).test(nullString);
 		.negate()
@@ -63,26 +73,36 @@ Package java.util.function
 		-----so, a.or(b).and(c)	must be read as: (a || b) && c
 		-----    a.and(b).or(c) must be read as: (a && b) || c	
 		
-	IntPredicate..test(int i)............... int -> int..... IntPredicate evenNumbers = (int i) -> i % 2 == 0;
+	IntPredicate..test(int i)............... int -> boolean..... IntPredicate evenNumbers = (int i) -> i % 2 == 0;
 	DoublePredicate
 	BiPredicate............................. (L, R) -> boolean
 	
 	
-	Consumer..accept()...................... T -> void...... forEach(Arrays.asList(1,2,3,4,5), (Integer i) -> System.out.println(i) );
-	IntConsumer
-	BiConsumer..							(T, U) -> void
 	
-	Function..apply()....................... T -> R......... List<Integer> l = map(Array.asList( "Lambdas", "in", "action"), (String s) -> s.legth()) );
-			 .andThen()..................... f.andThen(g) ===> g(f(x))
-			 .compose()..................... f.compose(g) ===> f(g(x))
+### Consumer.
+		.accept()........................... T -> void...... forEach(Arrays.asList(1,2,3,4,5),(Integer i) -> System.out.println(i) );
+
+		IntConsumer
+		BiConsumer..							(T, U) -> void
+
+
+		
+### Function.
+			Gneric(T) -> Generic(R)
+			.apply()....................... T -> R......... List<Integer> l = map(Array.asList( "Lambdas", "in", "action"), (String s) -> s.legth()) );
+
+			.andThen()..................... f.andThen(g) ===> g(f(x))
+			.compose()..................... f.compose(g) ===> f(g(x))
 	IntFunction
 	ToIntFunction							 T -> int
 	IntToDoubleFunction
 	BiFunction..apply().....................(T, U) -> R....................... (Apple a1, Apple a2)  ->  a1.getWeight().compareTo(a2.getWeight())
 	ToIntBiFunction<T,T>....................(T,T) -> int
+
 	
 	
-	Supplier..get()							() -> T......... () -> new Apple(10)  //it takes one argument and returns a result
+### Supplier.
+	.get()							() -> T......... () -> new Apple(10)  //it takes one argument and returns a result
 	
 	BinaryOperator..						(T, T) -> T
 	IntBinaryOperator..						(int, int) -> int................. (int a, int b) -> A * b
@@ -91,12 +111,13 @@ Package java.util.function
 	UnaryOperator..							T -> T
 
 
----------------------------------------------------------------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------------------------------------------------------------
->http://www.baeldung.com/java-8-double-colon-operator
 
->[method reference] double colon '::' 
+---------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------
+#http://www.baeldung.com/java-8-double-colon-operator
+
+#[method reference] double colon '::' 
 	
 	[Bound][t2]........................ Supplier<String> supplier = t2::method;
 	[UnBound][class/instance name]..... Function<Test, String> function = Test::method;
@@ -143,8 +164,8 @@ Package java.util.function
 	
 	
 
->https://stackoverflow.com/questions/35914775/java-8-difference-between-method-reference-bound-receiver-and-unbound-receiver
->Java 8: Difference between method reference Bound Receiver and UnBound Receiver
+#https://stackoverflow.com/questions/35914775/java-8-difference-between-method-reference-bound-receiver-and-unbound-receiver
+#Java 8: Difference between method reference Bound Receiver and UnBound Receiver
 
 		EX1
 		The idea of unBound receiver such as String::length is that you’re referring to a method to 
@@ -637,12 +658,28 @@ Package java.util.function
 			Optional<Dish> mostCalorieDish2 = menu.stream().collect(reducing( (d1, d2) -> d1.getCalories() > d2.getCalories() ? d1 : d2) );
 			
 			
+			
+			
+		NOTE: groupingBy(f) ==> shorthand for groupingBy(f, toList())
+		NOTE: groupingBy generates a Map<x, list<>)
+			OR
+			  groupingBy(Map<x, Map<y, list<>>) <=== inner groupingBy
+			  	
+		NOTE: groupingBy( k.., v[filtering.., output..] )	
+		NOTE: groupingBy( k.., v[mapping.., output..] )	
+								[counting()
+								[maxBy()
 		[(Collectors.groupingBy()]
 		[groupingByConcurrent()] same as above
+		
 		
 			[Map] [:: method reference]
 					Map<Dish.Type, List<Dish>> dishesByType =
 							menu.stream().collect(groupingBy(Dish::getType));
+							
+					[result set]
+						{FISH=[prawns, salmon], OTHER=[french fries, rice, season fruit, pizza],
+ 							MEAT=[pork, beef, chicken]}
 
 			[Map] [..lambda..]
 					public enum CaloricLevel { DIET, NORMAL, FAT };
@@ -650,10 +687,15 @@ Package java.util.function
 						menu.stream().collect( groupingBy(dish -> {
 															if (dish.getCalories() <= 400) return CaloricLevel.DIET;
 															else if (dish.getCalories() <= 700) return CaloricLevel.NORMAL;
-																else return CaloricLevel.FAT;
+															else return CaloricLevel.FAT;
 																	} 
 														 )
 											 );
+					[result set]
+						NORMAL beef french fries pizza salmon
+						DIET chicken rice season fruit prawns
+						FAT pork
+
 
 			[Map] toList
 					Map<Department,List<Employee>> employeeMap = 
@@ -677,21 +719,92 @@ Package java.util.function
 							.collect(Collectors.groupingBy(Employee::getDepartment, TreeMap::new, Collectors.toSet()));
 						  employeeMap5.forEach((Department key, Set<Employee> empSet) -> System.out.println(key +" -> "+empSet));
 
+
+
 			[Map] filtering... toList		  
 					Map<Dish.Type, List<Dish>> caloricDishesByType2 =
 						  menu.stream()
 						  	  .collect(Collectors.groupingBy(Dish::getType,
 						  			   Collectors.filtering(dish -> dish.getCalories() > 500, Collectors.toList())
 						  			  ));
+					[result set]
+						{OTHER=[french fries, pizza], MEAT=[pork, beef], FISH=[]}						  			  
+						  			  
+						  			  
 						 
-						 
-						 		
+			[Map] mapping... toList		  
+					Map<Dish.Type, List<Dish>> dishNamesByType =
+						  menu.stream()
+						  	  .collect(Collectors.groupingBy(Dish::getType,
+						  			   Collectors.mapping(Dish::getName, Collectors.toList())
+						  			  ));
+	
+			[flatMap]
+					Map<Dish.Type, Set<String>> dishNamesByType =
+						 menu.stream()
+							 .collect(groupingBy(Dish::getType,
+												 flatMapping(dish -> dishTags.get( dish.getName() ).stream(),
+												 toSet())));
+					[result set]
+						{MEAT=[salty, greasy, roasted, fried, crisp], FISH=[roasted, tasty, fresh,
+						delicious], OTHER=[salty, greasy, natural, light, tasty, fresh, fried]}						 							  			  
+						  			
+						  			  
+					 
+			[Map] multilevel [inner] groupingBy								 
+					Map<Dish.Type, Map<CaloricLevel, List<Dish>>> dishesByTypeCaloricLevel =
+						  menu.stream()
+						  	  .collect(
+						 			groupingBy(Dish::getType,
+						 					   groupingBy(dish -> {
+						 							if (dish.getCalories() <= 400) return CaloricLevel.DIET;
+													 else if (dish.getCalories() <= 700) return CaloricLevel.NORMAL;
+													 else return CaloricLevel.FAT;
+						 						} )
+									)
+						);	
+						
+					[result set]
+						{MEAT={DIET=[chicken], NORMAL=[beef], FAT=[pork]},
+						 FISH={DIET=[prawns], NORMAL=[salmon]},
+						 OTHER={DIET=[rice, seasonal fruit], NORMAL=[french fries, pizza]}}	 		
+
+
+			[Map] counting()
+					Map<Dish.Type, Long> typesCount = menu.stream()
+							.collect( groupingBy(Dish::getType, counting())  );
+
+					[result set]
+						{MEAT=3, FISH=2, OTHER=4}
+
+
+			NOTE: groupingBy(f) ==> shorthand for groupingBy(f, toList())
+			
+			[Map] maxBy() 
+				Map<Dish.Type, Optional<Dish>> mostCaloricByType =
+						 menu.stream()
+						 	.collect(groupingBy(Dish::getType,
+						 						maxBy(comparingInt(Dish::getCalories))));
+
+					[result set]
+						this can return Optional.empty !!!
+***						{FISH=Optional[salmon], OTHER=Optional[pizza], MEAT=Optional[pork]}
+
+				Map<Dish.Type, Dish> mostCaloricByType =
+					 menu.stream()
+						 .collect(groupingBy(Dish::getType,
+									 collectingAndThen(
+										 maxBy(comparingInt(Dish::getCalories)), Optional::get))); 
+					[result set]
+***						{FISH=salmon, OTHER=pizza, MEAT=pork}
+						
+						
 
 ---------------------------------------------------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------------------------------------
-[switch] with [lambda] expression:
-[Java 12]
+#[switch] with [lambda] expression:
+#[Java 12]
 
 	enum Day {
         MON, TUE, WED, THUR, FRI, SAT, SUN
@@ -715,13 +828,13 @@ Package java.util.function
 ---------------------------------------------------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------------------------------------
-Target type
+#Target type
 	-Predicate<List<String>>.......	Target type is:	<List<String>>
 	-Consumer<Apple>............... Target type is:	<Apple>	
 	
 
 -----	
-Cast expression
+#Cast expression
 
 	Object o = () -> {System.out.println("example"); };	<=== won't compile
 	
@@ -740,8 +853,10 @@ EventHandle..handle()................... button.setOnAction( (ActionEvent event)
 PrivilegedAction..run()................. () -> T........ PrivilegedAction<Integer> p = () -> 42;
 Callable..call()........................ () -> T........ Callable<Integer> p = () -> 42;
 
-Runnable..run()......................... () -> void..... Thread t = new Thread( () -> System.out.println("Hello World") ); t.start();
-														 // Runnable task = () -> {
+Runnable..run()......................... () -> void..... Thread t = new Thread( () -> System.out.println("Hello World") ); 
+														 t.start();
+														 
+														 Runnable task = () -> {
 															    String threadName = Thread.currentThread().getName();
 															    System.out.println("Hello " + threadName);
 															};														
@@ -802,7 +917,7 @@ Topic topic = topics.stream().filter(e -> e.getId().equalsIgnoreCase(id)).findFi
 		
 		
 ==================================================================================================		
-[sort]  inventory.sort(comparing(Apple::getWeight));
+#[sort]  inventory.sort(comparing(Apple::getWeight));
 		inventory.sort(comparing(Apple::getWeight).reversed()); 
 		
 		inventory.sort(comparing(Apple::getWeight) 			// sort by decreasing weight
@@ -943,7 +1058,7 @@ Topic topic = topics.stream().filter(e -> e.getId().equalsIgnoreCase(id)).findFi
 ==================================================================================================
 			
 ==================================================================================================
-[List][list.removeIf(true/false predicate)]
+# [List][list.removeIf(true/false predicate)]
 
 	public void updateTopic(String id, Topic topic) {
 		Topic t = topics.stream().filter(e -> e.getId().equalsIgnoreCase(id)).findFirst().get();
@@ -959,8 +1074,8 @@ Topic topic = topics.stream().filter(e -> e.getId().equalsIgnoreCase(id)).findFi
 ==================================================================================================
 
 ==================================================================================================
->http://www.baeldung.com/java-nashorn
->Introduction to Nashorn -JavaScript engine for JAVA8
+#http://www.baeldung.com/java-nashorn
+#Introduction to Nashorn -JavaScript engine for JAVA 8
 
 		This article is focused on Nashorn – the new default JavaScript engine for the JVM as of Java 8.
 
@@ -971,7 +1086,7 @@ Topic topic = topics.stream().filter(e -> e.getId().equalsIgnoreCase(id)).findFi
 			
 
 ==================================================================================================
->[optionals]
+#[Optionals]
 
 	menu.stream()
 		.filter(Dish::isVegetarian)
@@ -1008,7 +1123,7 @@ Topic topic = topics.stream().filter(e -> e.getId().equalsIgnoreCase(id)).findFi
 
 	}
 
-	
+	Arrays.stream({"a", "B", "x"});
 	
 ==================================================================================================
 
@@ -1318,6 +1433,30 @@ java timer
 
 
 
+============================================================================================
+============================================================================================
+============================================================================================
+[Data][Examples]
 
+		List<Dish> menu = Arrays.asList(
+				new Dish("pork", false, 800, Dish.Type.MEAT),
+				new Dish("beef", false, 700, Dish.Type.MEAT),
+				new Dish("chicken", false, 400, Dish.Type.MEAT),
+				new Dish("french fries", true, 530, Dish.Type.OTHER),
+				new Dish("rice", true, 350, Dish.Type.OTHER),
+				new Dish("season fruit", true, 120, Dish.Type.OTHER),
+				new Dish("pizza", true, 550, Dish.Type.OTHER),
+				new Dish("prawns", false, 300, Dish.Type.FISH),
+				new Dish("salmon", false, 450, Dish.Type.FISH) );
 	
 
+		Map<String, List<String>> dishTags = new HashMap<>();
+			dishTags.put("pork", asList("greasy", "salty"));
+			dishTags.put("beef", asList("salty", "roasted"));
+			dishTags.put("chicken", asList("fried", "crisp"));
+			dishTags.put("french fries", asList("greasy", "fried"));
+			dishTags.put("rice", asList("light", "natural"));
+			dishTags.put("season fruit", asList("fresh", "natural"));
+			dishTags.put("pizza", asList("tasty", "salty"));
+			dishTags.put("prawns", asList("tasty", "roasted"));
+			dishTags.put("salmon", asList("delicious", "fresh"));

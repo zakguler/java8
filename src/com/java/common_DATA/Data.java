@@ -6,12 +6,34 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import com.java.Common_ENUM.Color;
 import com.java.Common_ENUM.Sex;
+import com.java.Common_MODELS.Apple;
+import com.java.Common_MODELS.Dish;
 import com.java.Common_MODELS.User;
 
 public class Data {
+	
+	static List<Integer> numbers = Arrays.asList(3,5,8,12,20,45);
+	
+	static List<Apple> inventory = Arrays.asList(
+	        new Apple(Color.GREEN, 80),
+	        new Apple(Color.GREEN, 155),
+	        new Apple(Color.RED, 120)
+	    );
 
-//	 Arrays.asList(
+	static List<Dish> menu = Arrays.asList(
+			new Dish("pork", false, 800, Dish.Type.MEAT),
+			new Dish("beef", false, 700, Dish.Type.MEAT),
+			new Dish("chicken", false, 400, Dish.Type.MEAT),
+			new Dish("french fries", true, 530, Dish.Type.OTHER),
+			new Dish("rice", true, 350, Dish.Type.OTHER),
+			new Dish("season fruit", true, 120, Dish.Type.OTHER),
+			new Dish("pizza", true, 550, Dish.Type.OTHER),
+			new Dish("prawns", false, 300, Dish.Type.FISH),
+			new Dish("salmon", false, 450, Dish.Type.FISH) );
+	
+	
 		static List<User> users = Arrays.asList(
 					new User(20, "Alan",Sex.MALE),
 					new User(18, "Helen",Sex.FEMALE),
