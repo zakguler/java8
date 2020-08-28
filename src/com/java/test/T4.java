@@ -8,7 +8,7 @@ import java.util.function.Predicate;
 import com.java.Common_ENUM.Color;
 import com.java.Common_MODELS.Apple;
 
-
+// see also, generic method below
 public class T4 {
 
 	public static void main(String[] args) {
@@ -37,7 +37,7 @@ public class T4 {
 		list2.forEach(e -> System.out.println(e.getColor() + " " + e.getWeight()) );
 		
 		//==============================
-		// use generic custm class
+		// use generic custom class
 		// call the generic method
 		System.out.println("===========");
 		List<Apple> list3 = filter(inventory, ( e -> e.getWeight()>150));
@@ -61,7 +61,7 @@ public class T4 {
 
 	
 	//==============================
-	//make it generic
+	//make it generic method
 	public static <T> List<T> filter(List<T> list, Predicate<T> p) {
 		List<T> result = new ArrayList<>();
 		for(T e: list){

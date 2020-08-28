@@ -1,5 +1,9 @@
 
-# Online markdown editor: http://markdown.pioul.fr/
+### Online markdown editor: 
+	http://markdown.pioul.fr/
+
+### Basic syntax: 
+	https://www.markdownguide.org/basic-syntax/#:~:text=To%20emphasize%20text%20with%20bold,without%20spaces%20around%20the%20letters.
 
 ### java 8,9,10,11,12 updates
 
@@ -12,7 +16,7 @@
 ---------------------------------------------------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------------------------------------
-### java 9: Modules and reactive programming toolkit. [synchronization/parallel programming]
+## java 9: Modules and reactive programming toolkit. [synchronization/parallel programming]
 - right click on the project
 		- configure
 			- create module-info.java
@@ -30,7 +34,7 @@
 ---------------------------------------------------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------------------------------------
-# Functional Interfaces
+## Functional Interfaces
 
 you can use lambda expression in the context of a Functional Interface 
 - contains ONLY one abstract method.
@@ -47,7 +51,7 @@ you can use lambda expression in the context of a Functional Interface
 
 ### Functions
 
-- T: Object of generic type ***first argument***
+- T: T stands for "Type"... Object of generic type ***first argument***
 - U: type -second argument
 - L: ???
 - R: Object of generic type return/result
@@ -76,59 +80,69 @@ you can use lambda expression in the context of a Functional Interface
 	IntPredicate..test(int i)............... int -> boolean..... IntPredicate evenNumbers = (int i) -> i % 2 == 0;
 	DoublePredicate
 	BiPredicate............................. (L, R) -> boolean
-	
-	
+```	
+	NOTE: Special void-compatibility rule
+		If a lambda has a statement expression as its body, it’s compatible with a function
+		descriptor that returns void (provided the parameter list is compatible, too). For
+		example, both of the following lines are legal even though the method add of a List
+		returns a boolean and not void as expected in the Consumer context (T -> void):
+			// Predicate has a boolean return
+			Predicate<String> p = (String s) -> list.add(s);
+			// Consumer has a void return
+			Consumer<String> b = (String s) -> list.add(s);
+```
 	
 ### Consumer.
-		.accept()........................... T -> void...... forEach(Arrays.asList(1,2,3,4,5),(Integer i) -> System.out.println(i) );
-
-		IntConsumer
-		BiConsumer..							(T, U) -> void
+- .accept()........................... T -> void...... forEach(Arrays.asList(1,2,3,4,5),(Integer i) -> System.out.println(i) );
+- IntConsumer
+- BiConsumer..							(T, U) -> void
 
 
 		
 ### Function.
-			Gneric(T) -> Generic(R)
-			.apply()....................... T -> R......... List<Integer> l = map(Array.asList( "Lambdas", "in", "action"), (String s) -> s.legth()) );
+- zGeneric(T) -> zGeneric(R)
+- .apply()....................... T -> R......... List<Integer> l = map(Array.asList( "Lambdas", "in", "action"), (String s) -> s.legth()) );
 
-			.andThen()..................... f.andThen(g) ===> g(f(x))
-			.compose()..................... f.compose(g) ===> f(g(x))
-	IntFunction
-	ToIntFunction							 T -> int
-	IntToDoubleFunction
-	BiFunction..apply().....................(T, U) -> R....................... (Apple a1, Apple a2)  ->  a1.getWeight().compareTo(a2.getWeight())
-	ToIntBiFunction<T,T>....................(T,T) -> int
+- .andThen()..................... f.andThen(g) ===> g(f(x))
+- .compose()..................... f.compose(g) ===> f(g(x))
+
+- IntFunction
+- ToIntFunction							 T -> int
+- IntToDoubleFunction
+- BiFunction..apply().....................(T, U) -> R....................... (Apple a1, Apple a2)  ->  a1.getWeight().compareTo(a2.getWeight())
+- ToIntBiFunction<T,T>....................(T,T) -> int
 
 	
 	
 ### Supplier.
-	.get()							() -> T......... () -> new Apple(10)  //it takes one argument and returns a result
+- .get()							() -> T......... () -> new Apple(10)  //it takes one argument and returns a result
 	
-	BinaryOperator..						(T, T) -> T
-	IntBinaryOperator..						(int, int) -> int................. (int a, int b) -> A * b
-	LongBinaryOperator
+- BinaryOperator..						(T, T) -> T
+- IntBinaryOperator..						(int, int) -> int................. (int a, int b) -> A * b
+- LongBinaryOperator
 	
-	UnaryOperator..							T -> T
+- UnaryOperator..							T -> T
 
 
 
 ---------------------------------------------------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------------------------------------
-#http://www.baeldung.com/java-8-double-colon-operator
+## [method reference] double colon '::' 
 
-#[method reference] double colon '::' 
-	
-	[Bound][t2]........................ Supplier<String> supplier = t2::method;
-	[UnBound][class/instance name]..... Function<Test, String> function = Test::method;
-	
+```	
+http://www.baeldung.com/java-8-double-colon-operator
+```
+	Bound t2........................ Supplier<String> supplier = t2::method;
+	UnBoundc lass/instance name..... Function<Test, String> function = Test::method;
+```	
 	EX with [lambda] 
 			inventory.sort( (Apple a1, Apple a2) -> a1.getWeight().compareTo(a2.getWeight()) );
 			
 	   with [method reference]		
 			inventory.sort(comparing(Apple::getWeight)); 
 			inventory.sort(comparing(Apple::getWeight)reversed()); 
-
+```
 
     Lambda Method                                       reference equivalent    
     (Apple a) -> a.getWeight() ........................ Apple::getWeight
