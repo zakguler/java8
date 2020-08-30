@@ -67,19 +67,38 @@ you can use lambda expression in the context of a Functional Interface
 	Comparator..comparing()................. Comparator<Apple> c = Comparator.comparing(Apple::getWeight());
 	Comparable..compareTo().................
 
-### Predicate.
-		.test()............................. T -> boolean... List<String> strString = filter( listOfStrings, (String s) -> s.!s.isEmpty() );
 
-		.isEqual()
-		.and().............................. boolean outcome2 = nonNullPredicate.and(hasLengthOf10).test(nullString);
-		.negate()
-		.or()
-		-----so, a.or(b).and(c)	must be read as: (a || b) && c
-		-----    a.and(b).or(c) must be read as: (a && b) || c	
-		
-	IntPredicate..test(int i)............... int -> boolean..... IntPredicate evenNumbers = (int i) -> i % 2 == 0;
-	DoublePredicate
-	BiPredicate............................. (L, R) -> boolean
+
+### Predicate.
+- .test()............................. T -> boolean... List<String> strString = filter( listOfStrings, (String s) -> s.!s.isEmpty() );
+
+- .isEqual()
+
+- .negate()
+```
+	Predicate<Apple> redApple = (a -> a.getColor().equal(COLOR.RED) );
+	Predicate<Apple> notRedApple = redApple.negate();
+	
+```
+- .and()
+```
+	Predicate<Apple> redAndHeavyApple = redApple.and(a->a.getWeight()>150);
+```
+- .or()
+```
+	Predicate<Apple> redAndHeavyOrGreenApple =
+				redApple
+				.and(a->a.getWeight()>150)
+				.or(a -> a.getColor().equal(COLOR.GREEN))
+	
+	so, a.or(b).and(c)	must be read as: (a || b) && c
+		a.and(b).or(c) must be read as: (a && b) || c	
+```		
+	
+- IntPredicate..test(int i)............... int -> boolean..... IntPredicate evenNumbers = (int i) -> i % 2 == 0;
+- DoublePredicate
+- BiPredicate............................. (L, R) -> boolean
+
 ```	
 	NOTE: Special void-compatibility rule
 		If a lambda has a statement expression as its body, it’s compatible with a function
@@ -92,19 +111,47 @@ you can use lambda expression in the context of a Functional Interface
 			Consumer<String> b = (String s) -> list.add(s);
 ```
 	
+	
 ### Consumer.
-- .accept()........................... T -> void...... forEach(Arrays.asList(1,2,3,4,5),(Integer i) -> System.out.println(i) );
+- .accept()........................... T -> void
+```
+ 	forEach(Arrays.asList(1,2,3,4,5),(Integer i) -> System.out.println(i) );
+```
 - IntConsumer
-- BiConsumer..							(T, U) -> void
+- BiConsumer.......................... (T, U) -> void
 
 
 		
 ### Function.
 - zGeneric(T) -> zGeneric(R)
-- .apply()....................... T -> R......... List<Integer> l = map(Array.asList( "Lambdas", "in", "action"), (String s) -> s.legth()) );
-
+- .apply()....................... T -> R
+```
+	List<Integer> l = zMap(Array.asList( "Lambdas", "in", "action"), (String s) -> s.legth()));
+	..
+	public List<Integer> zMap(List<String> list, Function f){
+		List<Integer> i = ArrayList<>();
+		for (String s: list){
+			i.add(f.apply(s));
+		}
+	}
+```
 - .andThen()..................... f.andThen(g) ===> g(f(x))
+```
+	static Function<Integer, Integer> f = x -> x + 1;
+	static Function<Integer, Integer> g = x -> x * 2;	
+	static Function<Integer, Integer> h = f.andThen(g);	// g(f(x))
+	..
+	int result = h.apply(1);	// 1+1 *2 = 4
+```
 - .compose()..................... f.compose(g) ===> f(g(x))
+```
+	static Function<Integer, Integer> f = x -> x + 1;
+	static Function<Integer, Integer> g = x -> x * 2;	
+	static Function<Integer, Integer> m = f.compose(g);	// f(g(x))
+	..
+	int result = m.apply(1);	// 1*2 +1 = 3
+
+```
 
 - IntFunction
 - ToIntFunction							 T -> int
@@ -133,18 +180,27 @@ you can use lambda expression in the context of a Functional Interface
 ```	
 http://www.baeldung.com/java-8-double-colon-operator
 ```
-	Bound t2........................ Supplier<String> supplier = t2::method;
-	UnBoundc lass/instance name..... Function<Test, String> function = Test::method;
+ **Bound** *t2*........................ Supplier<String> supplier = t2::method;
+ 
+ **UnBoundc** *lass/instance name*..... Function<Test, String> function = Test::method;
 ```	
-	EX with [lambda] 
-			inventory.sort( (Apple a1, Apple a2) -> a1.getWeight().compareTo(a2.getWeight()) );
-			
-	   with [method reference]		
-			inventory.sort(comparing(Apple::getWeight)); 
-			inventory.sort(comparing(Apple::getWeight)reversed()); 
+EX with [lambda] 
+		inventory.sort( (Apple a1, Apple a2) -> a1.getWeight().compareTo(a2.getWeight()) );
+		
+   with [method reference]		
+		inventory.sort(comparing(Apple::getWeight)); 
+		inventory.sort( comparing(Apple::getWeight).reversed() ); 
+	
+   Composing:	
+   with [.then] if weight the same further comparison needed,  ex, by country:
+ 		inventory.sort(comparing(Apple::getWeight)
+ 						.reversed()
+ 						.thenComparing(Apple::getCountry)
+ 					  );   					
 ```
 
-    Lambda Method                                       reference equivalent    
+    Lambda Method                                       reference equivalent
+        
     (Apple a) -> a.getWeight() ........................ Apple::getWeight
     () -> Thread.currentThread().dumpStack() .......... Thread.currentThread()::dumpStack
     (str, i) -> str.substring(i) ...................... String::substring
@@ -152,19 +208,19 @@ http://www.baeldung.com/java-8-double-colon-operator
     (String s) -> this.isValidName(s).................. this::isValidName
            
 
-	[static method].................................... Integer::parseInt
-	[instance method].................................. String::length
-	[local method] Transaction expensiveTransaction.... expensiveTransaction::getValue 
-	[constructors reference][with 0 arguments]................... [new Apple()]=========>	Supplier<Apple> s = Apple::new; Apple a1 = s.get();
-	[constructors reference][with 1 arguments]................... [new Apple(weight)]===>	Function<Integer, Apple> s = Apple::new; Apple a1 = s.get(110);
-	[constructors reference][with 2 arguments]................... [new Apple(color, weight)]===>	BiFunction<Color, Integer, Apple> s = Apple::new; Apple a1 = s.get(GREEN, 110);
-	[constructors reference][with 3 arguments]................... create your own CustomTriFunction<T, U, V, R>... see example below
-	[array constructors] ???
-	[super calls] ???
+- [static method].................................... Integer::parseInt
+- [instance method].................................. String::length
+- [local method] Transaction expensiveTransaction.... expensiveTransaction::getValue 
 	
+- [constructors reference][with 0 arguments]................... [new Apple()]=========>	Supplier<Apple> s = Apple::new; Apple a1 = s.get();
 	
+- [constructors reference][with 1 arguments]................... [new Apple(weight)]===>	Function<Integer, Apple> s = Apple::new; Apple a1 = s.get(110);
 	
+- [constructors reference][with 2 arguments]................... [new Apple(color, weight)]===>	BiFunction<Color, Integer, Apple> s = Apple::new; Apple a1 = s.get(GREEN, 110);
 	
+- [constructors reference][with 3 arguments]................... create your own CustomTriFunction<T, U, V, R>... see example below
+	
+```	
 	EX:
 		[constructors reference][with 3 arguments]................... create your own CustomTriFunction<T, U, V, R>
 			public interface CustomTriFunction<T, U, V, R> {
@@ -175,12 +231,16 @@ http://www.baeldung.com/java-8-double-colon-operator
 			
 	EX: expensiveTransaction = new Transaction();
 		expensiveTransaction::getValue;	<====================== () -> expensiveTransaction.getValue();
+```	
+- [array constructors] ???
+- [super calls] ???
+	
 	
 	
 
-#https://stackoverflow.com/questions/35914775/java-8-difference-between-method-reference-bound-receiver-and-unbound-receiver
-#Java 8: Difference between method reference Bound Receiver and UnBound Receiver
-
+- https://stackoverflow.com/questions/35914775/java-8-difference-between-method-reference-bound-receiver-and-unbound-receiver
+- Java 8: Difference between method reference Bound Receiver and UnBound Receiver
+```
 		EX1
 		The idea of unBound receiver such as String::length is that you’re referring to a method to 
 		an object that will be supplied as one of the parameters of the lambda. 
@@ -200,9 +260,9 @@ http://www.baeldung.com/java-8-double-colon-operator
 			(args) -> expr.instanceMethod(args) can be expr::instanceMethod
 
 		Answer retired from Java 8 in Action book
+```
 
-
-		----
+```
 		EX2
 		Basically, unbound receivers allow you to use instance methods as 
 		if they were static methods with a first parameter of the declaring type - so 
@@ -242,22 +302,23 @@ http://www.baeldung.com/java-8-double-colon-operator
 			public String method() {
 				return name;
 			}
-
-
+```
 
 ---------------------------
 ---------------------------
 
--Stream.concat( Stream(a), Stream(b) )	// also you can use flatMap(): search for an example..
--Stream.of(l1, l2)
--Stream.of(n1, n2).flatMap(Collection::stream);
+# Streams
+
+- Stream.concat( Stream(a), Stream(b) )	// also you can use flatMap(): search for an example..
+- Stream.of(l1, l2)
+- Stream.of(n1, n2).flatMap(Collection::stream);
 	
--Arrays.asList("a", "b", "c");
--static List<Dish> specialMenu = Arrays.asList( new Dish("seasonal fruit", true, 120, Dish.Type.OTHER), new Dish("prawns", false, 300, Dish.Type.FISH));
--Stream<String> streamOfWords = Arrays.stream( {"GoodBye", "World"} );
+- Arrays.asList("a", "b", "c");
+- static List<Dish> specialMenu = Arrays.asList( new Dish("seasonal fruit", true, 120, Dish.Type.OTHER), new Dish("prawns", false, 300, Dish.Type.FISH));
+- Stream<String> streamOfWords = Arrays.stream( {"GoodBye", "World"} );
 
 
--Building streams [summary]:
+- Building streams [summary]:
 	
 	[Stream.of()]=============================== Stream<String> s = Stream.of("Modern ", "Java ", "In ", "Action");
 	[Stream.empty()]============================ Stream<String> emptyStream = Stream.empty();	// get an empty stream
