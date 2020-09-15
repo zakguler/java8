@@ -9,6 +9,8 @@
     ###
     
     - xyz   <=== UL
+      - ABC <=== inner UL
+      
     
     ```
     ``` <======= code block
@@ -38,4 +40,11 @@
 			|Comparator..compare()...................| (T, T) -> R.... personList.sort( (Person p1, Person p2)  -> p1.getSurName().compareTo(p2.getSurName()) );|
 			|Comparator..comparing()................. |Comparator<Apple> c = Comparator.comparing(Apple::getWeight());|
 			|Comparable..compareTo().................| |
+			
+			
+	New Line
+		add 'two spaces' at the end of the line and a 'return'	
+		
+		
+			
 	    

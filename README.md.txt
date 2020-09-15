@@ -13,9 +13,10 @@
 
 
 
----------------------------------------------------------------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------
+-----------------------------
+-----------------------------
+
 ## java 9: Modules and reactive programming toolkit. [synchronization/parallel programming]
 - right click on the project
 		- configure
@@ -29,11 +30,7 @@
 ```
 - exports com.java.collections.mapList;
 	
-	
-	
----------------------------------------------------------------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------------------------------------------------------------
+
 ## Functional Interfaces
 
 you can use lambda expression in the context of a Functional Interface 
@@ -124,6 +121,7 @@ you can use lambda expression in the context of a Functional Interface
 		
 ### Function.
 - zGeneric(T) -> zGeneric(R)
+
 - .apply()....................... T -> R
 ```
 	List<Integer> l = zMap(Array.asList( "Lambdas", "in", "action"), (String s) -> s.legth()));
@@ -164,18 +162,18 @@ you can use lambda expression in the context of a Functional Interface
 ### Supplier.
 - .get()							() -> T......... () -> new Apple(10)  //it takes one argument and returns a result
 	
-- BinaryOperator..						(T, T) -> T
-- IntBinaryOperator..						(int, int) -> int................. (int a, int b) -> A * b
+- BinaryOperator..					(T, T) -> T
+- IntBinaryOperator..				(int, int) -> int................. (int a, int b) -> A * b
 - LongBinaryOperator
 	
-- UnaryOperator..							T -> T
+- UnaryOperator..					T -> T
 
 
 
----------------------------------------------------------------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------------------------------------------------------------
-## [method reference] double colon '::' 
+=============================
+=============================
+=============================
+## method reference... _double colon_ '::' 
 
 ```	
 http://www.baeldung.com/java-8-double-colon-operator
@@ -208,17 +206,17 @@ EX with [lambda]
     (String s) -> this.isValidName(s).................. this::isValidName
            
 
-- [static method].................................... Integer::parseInt
-- [instance method].................................. String::length
-- [local method] Transaction expensiveTransaction.... expensiveTransaction::getValue 
+- static method.................................... Integer::parseInt
+- instance method.................................. String::length
+- local method Transaction expensiveTransaction.... expensiveTransaction::getValue 
 	
-- [constructors reference][with 0 arguments]................... [new Apple()]=========>	Supplier<Apple> s = Apple::new; Apple a1 = s.get();
+- constructors reference.. with 0 arguments................... [new Apple()]=========>	Supplier<Apple> s = Apple::new; Apple a1 = s.get();
 	
-- [constructors reference][with 1 arguments]................... [new Apple(weight)]===>	Function<Integer, Apple> s = Apple::new; Apple a1 = s.get(110);
+- constructors reference.. with 1 arguments................... [new Apple(weight)]===>	Function<Integer, Apple> s = Apple::new; Apple a1 = s.get(110);
 	
-- [constructors reference][with 2 arguments]................... [new Apple(color, weight)]===>	BiFunction<Color, Integer, Apple> s = Apple::new; Apple a1 = s.get(GREEN, 110);
+- constructors reference.. with 2 arguments................... [new Apple(color, weight)]===>	BiFunction<Color, Integer, Apple> s = Apple::new; Apple a1 = s.get(GREEN, 110);
 	
-- [constructors reference][with 3 arguments]................... create your own CustomTriFunction<T, U, V, R>... see example below
+- constructors reference.. with 3 arguments................... create your own CustomTriFunction<T, U, V, R>... see example below
 	
 ```	
 	EX:
@@ -304,8 +302,9 @@ EX with [lambda]
 			}
 ```
 
----------------------------
----------------------------
+=============================
+=============================
+=============================
 
 # Streams
 
@@ -314,44 +313,72 @@ EX with [lambda]
 - Stream.of(n1, n2).flatMap(Collection::stream);
 	
 - Arrays.asList("a", "b", "c");
-- static List<Dish> specialMenu = Arrays.asList( new Dish("seasonal fruit", true, 120, Dish.Type.OTHER), new Dish("prawns", false, 300, Dish.Type.FISH));
+	static List<Dish> specialMenu = Arrays.asList( 
+	new Dish("seasonal fruit", true, 120, Dish.Type.OTHER),
+	new Dish("prawns", false, 300, Dish.Type.FISH));
+	
 - Stream<String> streamOfWords = Arrays.stream( {"GoodBye", "World"} );
 
 
 - Building streams [summary]:
+```	
+	Stream.of()
+		Stream<String> s = Stream.of("Modern ", "Java ", "In ", "Action");
+	Stream.empty()
+		Stream<String> emptyStream = Stream.empty();	// get an empty stream
+	Stream.ofNullable(
+		[Java9]
+			Stream<String> homeValueStream = Stream.ofNullable(System.getProperty("home"));
+	Arrays.stream()
+		int sum = Arrays.stream( {2, 3, 5, 7, 11, 13} ).sum();
+	l2.stream()
+		[from a List]
+			List<String> l2 = Arrays.asList("a", "b", "c"); Stream<String> streamL2 = l2.stream();
+	collc.stream()
+		[from a Collection]
+			Collection<String> collection = Arrays.asList("a", "b", "c"); 
+			Stream<String> streamOfCollection = collection.stream();
+		[from a file]
+			try (Stream<String> lines = Files.lines(Paths.get("data.txt"), Charset.defaultCharset())) {....}
 	
-	[Stream.of()]=============================== Stream<String> s = Stream.of("Modern ", "Java ", "In ", "Action");
-	[Stream.empty()]============================ Stream<String> emptyStream = Stream.empty();	// get an empty stream
-	[Stream.ofNullable()]======[Java9]========== Stream<String> homeValueStream = Stream.ofNullable(System.getProperty("home"));
-	[Arrays.stream()]=========================== int sum = Arrays.stream( {2, 3, 5, 7, 11, 13} ).sum();
-	[l2.stream()][from a List]================== List<String> l2 = Arrays.asList("a", "b", "c"); Stream<String> streamL2 = l2.stream();
-	[coll.stream()][from a Collection]========== Collection<String> collection = Arrays.asList("a", "b", "c"); Stream<String> streamOfCollection = collection.stream();
-	[from a file]=============================== try (Stream<String> lines = Files.lines(Paths.get("data.txt"), Charset.defaultCharset())) {....}
-	
-	[map.entrySet().stream()][from a map]======= Set<Map.Entry<String, Integer>> entries = someMap.entrySet();
-												 Stream<Map.Entry<String, Integer>> entriesStream = entries.stream();
-	
-	[map.keySet().stream][from a map..key]====== Set<String> keySet = someMap.keySet();
-												 Stream<String> keysStream = keySet.stream();
+	map.entrySet().stream()
+		[from a map]
+			Set<Map.Entry<String, Integer>> entries = someMap.entrySet();
+			Stream<Map.Entry<String, Integer>> entriesStream = entries.stream();
+ 
+	map.keySet().stream
+		[from a map..key]
+			Set<String> keySet = someMap.keySet();
+			Stream<String> keysStream = keySet.stream();
 					
-	[map.values().stream][from a map..value]==== Collection<Integer> values = someMap.values();
-												 Stream<Integer> valuesStream = values.stream();
+	map.values().stream
+		[from a map..value]
+			Collection<Integer> values = someMap.values();
+			Stream<Integer> valuesStream = values.stream();
 												 
-	[Stream.iterate(x,y)] [infinite stream]===== Stream.iterate(0, n -> n + 2).limit(10).forEach(System.out::println);
+	Stream.iterate(x,y)
+		[infinite stream]
+			Stream.iterate(0, n -> n + 2).limit(10).forEach(System.out::println);
 	
-	[j9][IntStream.iterate(x,y,z)]============== IntStream.iterate(0, n -> n < 100, n -> n + 4)	//<=== (starting, predicate, lambda function)
-														  .forEach(System.out::println);
-	[Stream.generate()] [infinite stream]======= Stream.generate(() -> Double.toString(Math.random() * 1000)).limit(10);
+	java9
+	IntStream.iterate(x,y,z)
+		IntStream.iterate(0, n -> n < 100, n -> n + 4)	
+			//<=== (starting, predicate, lambda function).forEach(System.out::println);
 	
+	Stream.generate()
+		[infinite stream]
+			Stream.generate(() -> Double.toString(Math.random() * 1000)).limit(10);
+```	
 
-.stream()
-.parallelStream()
+- .stream()
+- .parallelStream()
 
-	-stream pipeline is similar to the [builder pattern] [chain of calls]
+	- stream pipeline is similar to the [builder pattern] [chain of calls]
+				 (see http://en.wikipedia.org/wiki/Builder_pattern)
 	
-	-generating a stream from an ordered collection preserves the ordering.
+	- generating a stream from an ordered collection preserves the ordering.
 
-	-Stateless vs stateful
+	- Stateless vs stateful
 			stateless:
 				.map
 				.filter
@@ -426,9 +453,10 @@ EX with [lambda]
 			.findAny()
 			.findEach()			
 			
-	---------------------------------- 	
-	---------------------------------- 	
-	[.distinct]
+	------------------------------ 	
+	------------------------------
+	[.distinct] 
+		// you can use it to remove duplicates
 		List<Integer> numbers = Arrays.asList(1, 2, 1, 3, 3, 2, 4);
 		numbers.stream()
 				.filter(i -> i % 2 == 0)
@@ -437,11 +465,22 @@ EX with [lambda]
  	
  	slicing 
  	[.takeWhile]
+ 		// [already sorted elements] use to stop (selecting) filtering when it is true
  			import static java.util.stream.Collectors.*;
 			List<Dish> filteredMenu = specialMenu
 				.stream()
 				.takeWhile(dish -> dish.getCalories() < 320) // [must be a sorted list] +stops once a dish found >= 320
 				.collect(toList());
+
+ 	slicing 
+ 	[.dropWhile]
+ 		// [already sorted elements] use to select filtering when the ones that's not true [the opposite of .takeWhile]
+ 			import static java.util.stream.Collectors.*;
+			List<Dish> filteredMenu = specialMenu
+				.stream()
+				.dropWhile(dish -> dish.getCalories() < 320) // [must be a sorted list] +starts selecting once a dish found >= 320
+				.collect(toList());
+ 		
 		
 	 		
 	[filter]
@@ -453,7 +492,11 @@ EX with [lambda]
 				.limit(2)
 				.collect(toList());
 
+	[filter]
+	[skip] 	
 
+
+	// map is almost like select a particular column in sql
 	[map]
 	[mapToInt]
 	[mapToDouble]
@@ -875,9 +918,9 @@ EX with [lambda]
 						
 						
 
----------------------------------------------------------------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------------------------------------------------------------
+=============================
+=============================
+=============================
 #[switch] with [lambda] expression:
 #[Java 12]
 
@@ -900,9 +943,9 @@ EX with [lambda]
 	}
 
 
----------------------------------------------------------------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------------------------------------------------------------
+=============================
+=============================
+=============================
 #Target type
 	-Predicate<List<String>>.......	Target type is:	<List<String>>
 	-Consumer<Apple>............... Target type is:	<Apple>	
@@ -919,9 +962,9 @@ EX with [lambda]
 	OR
 		Runnable r = () -> {System.out.println("example"); };	<=== won't compile
 
----------------------------------------------------------------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------------------------------------------------------------
+=============================
+=============================
+=============================
 ActionListener..actionPerformed()....... jpfPassword.addActionListener(e -> nOKButton.doClick());
 EventHandle..handle()................... button.setOnAction( (ActionEvent event) -> lable.setText("Sent!!") );
 
@@ -942,8 +985,9 @@ Runnable..run()......................... () -> void..... Thread t = new Thread( 
 
 
 
----------------------------
----------------------------
+=============================
+=============================
+=============================
 // Split up the array of whole names into an array of first/last names
 import static java.util.stream.Collectors.*;
 List<Object[]> splitUpNames = Arrays.asList("John Woo", "Jeff Dean", "Josh Bloch", "Josh Long").stream()
@@ -991,7 +1035,7 @@ quotes.getQuotes()
 Topic topic = topics.stream().filter(e -> e.getId().equalsIgnoreCase(id)).findFirst().get();
 		
 		
-==================================================================================================		
+=============================
 #[sort]  inventory.sort(comparing(Apple::getWeight));
 		inventory.sort(comparing(Apple::getWeight).reversed()); 
 		
@@ -1006,7 +1050,7 @@ Topic topic = topics.stream().filter(e -> e.getId().equalsIgnoreCase(id)).findFi
 		strList.sort( String::compareToIgnoreCase );
 		
 		
-==================================================================================================		
+=============================
 [map]<list>
 [map.compute()]
 [map.computeIfPresent()]
@@ -1130,9 +1174,9 @@ Topic topic = topics.stream().filter(e -> e.getId().equalsIgnoreCase(id)).findFi
 
 					
 			
-==================================================================================================
-			
-==================================================================================================
+=============================
+=============================
+=============================
 # [List][list.removeIf(true/false predicate)]
 
 	public void updateTopic(String id, Topic topic) {
@@ -1146,9 +1190,9 @@ Topic topic = topics.stream().filter(e -> e.getId().equalsIgnoreCase(id)).findFi
 
 
 
-==================================================================================================
-
-==================================================================================================
+=============================
+=============================
+=============================
 #http://www.baeldung.com/java-nashorn
 #Introduction to Nashorn -JavaScript engine for JAVA 8
 
@@ -1160,7 +1204,7 @@ Topic topic = topics.stream().filter(e -> e.getId().equalsIgnoreCase(id)).findFi
 	
 			
 
-==================================================================================================
+============================
 #[Optionals]
 
 	menu.stream()
@@ -1175,7 +1219,7 @@ Topic topic = topics.stream().filter(e -> e.getId().equalsIgnoreCase(id)).findFi
 	
 
 
-==================================================================================================
+=============================
 [Arrays..stream]
 [.min]
 [.orElse]
@@ -1200,7 +1244,7 @@ Topic topic = topics.stream().filter(e -> e.getId().equalsIgnoreCase(id)).findFi
 
 	Arrays.stream({"a", "B", "x"});
 	
-==================================================================================================
+=============================
 
 
 
@@ -1220,9 +1264,10 @@ Topic topic = topics.stream().filter(e -> e.getId().equalsIgnoreCase(id)).findFi
 	
 	
 
-============================================================================================
-============================================================================================
-============================================================================================
+=============================
+=============================
+=============================
+
 
 -[anonymous functions] [lambda] functional programming.
 -[Predicate<T>] []Functional Interface]: This is a functional interface and can therefore be used as the assignment target for a lambda expression or method reference.
@@ -1238,13 +1283,14 @@ Topic topic = topics.stream().filter(e -> e.getId().equalsIgnoreCase(id)).findFi
 
 
 
-============================================================================================
-============================================================================================
-============================================================================================
+=============================
+=============================
+=============================
 
----------------------------------------------------------------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------------------------------------------------------------
+
+=============================
+=============================
+=============================
 
 EX_1:	String twoLines = processFile( (BufferedReader br) -> br.readline() + br.readline() );
 
@@ -1313,8 +1359,9 @@ EX_4:	Function..apply() T -> R
 							);
 
 
-=====
-=====
+=============================
+=============================
+=============================
 convert lambda expressions to method references
 EX_5:	Method references:
 
@@ -1349,9 +1396,9 @@ EX_5:	Method references:
 		contains = List::contains;
 		
 
----------------------------------------------------------------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------------------------------------------------------------
+=============================
+=============================
+=============================
 Functional Descriptor
 ---------------------
 T -> boolean	<================================================================= [function descriptor]
@@ -1375,7 +1422,7 @@ Supplier<Apple> s = () -> new Apple(10);<=======================================
       
       
             
---------------------------------------
+-----------------------------
 
 
 (String s) -> s.length() .....................................String..s.length()
@@ -1415,9 +1462,9 @@ Callable<Integer> p = () -> 42;
 
 
 
-============================================================================================
-============================================================================================
-============================================================================================
+=============================
+=============================
+=============================
 java timer
 
 		Come on guys! Nobody mentioned the Guava way to do that (which is arguably awesome):
@@ -1433,7 +1480,7 @@ java timer
 		 I.e. if the value is small, it'll output 38 ns, if it's long, it'll show 5m 3s
 
 		-Unfortunately, Guava's Stopwatch isn't thread-safe.  
-		--------------------------------------------------------------------------------------------
+		------------------------------
 
 
 		long startTime = System.nanoTime();
@@ -1443,7 +1490,7 @@ java timer
 		long duration = (endTime - startTime);  //divide by 1000000 to get milliseconds.
 
 
-		--------------------------------------------------------------------------------------------
+		------------------------------
 
 
 		long startTime = System.currentTimeMillis();
@@ -1454,7 +1501,7 @@ java timer
 
 		System.out.println("That took " + (endTime - startTime) + " milliseconds");
 
-		--------------------------------------------------------------------------------------------
+		------------------------------
 
 		http://stackoverflow.com/questions/180158/how-do-i-time-a-methods-execution-in-java
 
@@ -1506,11 +1553,43 @@ java timer
 
 
 
+=============================
+=============================
+=============================
+- Debug Streams
+- EX:
+```
+List<String> names =
+	 menu.stream()
+		 .filter(dish -> {
+				 System.out.println("filtering:" + dish.getName());
+				 return dish.getCalories() > 300;
+			 })
+		 .map(dish -> {
+				 System.out.println("mapping:" + dish.getName());
+				 return dish.getName();
+			 })
+		 .limit(3)
+ 		 .collect(toList());
+ 		 
+System.out.println(names);
+
+This code, when executed, will print the following:
+	filtering:pork
+	mapping:pork
+	filtering:beef
+	mapping:beef
+	filtering:chicken
+	mapping:chicken
+	
+	[pork, beef, chicken]
+```
 
 
-============================================================================================
-============================================================================================
-============================================================================================
+=============================
+=============================
+=============================
+
 [Data][Examples]
 
 		List<Dish> menu = Arrays.asList(

@@ -1,11 +1,11 @@
-package com.java.streams.noneMatch;
+package com.java.streams.finding_matching;
 
 import java.util.function.Predicate;
 import java.util.stream.IntStream;
 
 // find if the number is a prime number
 
-public class NoneMatch {
+public class NoneMatch_RetBoolean_EX {
 	
 	public static void main(String[] args) {
 		

@@ -14,15 +14,15 @@ import com.java.Common_MODELS.User;
 
 public class Data {
 	
-	static List<Integer> numbers = Arrays.asList(3,5,8,12,20,45);
+	public static List<Integer> numbers = Arrays.asList(3,5,8,12,20,45);
 	
-	static List<Apple> inventory = Arrays.asList(
+	public static List<Apple> inventory = Arrays.asList(
 	        new Apple(Color.GREEN, 80),
 	        new Apple(Color.GREEN, 155),
 	        new Apple(Color.RED, 120)
 	    );
 
-	static List<Dish> menu = Arrays.asList(
+	public static List<Dish> menu = Arrays.asList(
 			new Dish("pork", false, 800, Dish.Type.MEAT),
 			new Dish("beef", false, 700, Dish.Type.MEAT),
 			new Dish("chicken", false, 400, Dish.Type.MEAT),
