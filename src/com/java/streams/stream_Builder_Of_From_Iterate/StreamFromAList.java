@@ -1,4 +1,4 @@
-package com.java.streams.streamFrom;
+package com.java.streams.stream_Builder_Of_From_Iterate;
 
 import java.util.Arrays;
 import java.util.Collection;

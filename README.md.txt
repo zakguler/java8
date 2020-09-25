@@ -186,12 +186,12 @@ EX with [lambda]
 		inventory.sort( (Apple a1, Apple a2) -> a1.getWeight().compareTo(a2.getWeight()) );
 		
    with [method reference]		
-		inventory.sort(comparing(Apple::getWeight)); 
-		inventory.sort( comparing(Apple::getWeight).reversed() ); 
+		inventory.sort(Comparator.comparing(Apple::getWeight)); 
+		inventory.sort( Comparator.comparing(Apple::getWeight).reversed() ); 
 	
    Composing:	
    with [.then] if weight the same further comparison needed,  ex, by country:
- 		inventory.sort(comparing(Apple::getWeight)
+ 		inventory.sort(Comparator.comparing(Apple::getWeight)
  						.reversed()
  						.thenComparing(Apple::getCountry)
  					  );   					
@@ -308,16 +308,50 @@ EX with [lambda]
 
 # Streams
 
-- Stream.concat( Stream(a), Stream(b) )	// also you can use flatMap(): search for an example..
-- Stream.of(l1, l2)
-- Stream.of(n1, n2).flatMap(Collection::stream);
+## numeric streams [primitive]:
+
+- intStream
+- doubleStream
+- longStream
+
+- mapToInt
+- mapToDouble
+- mapToLong
+
+	- sum()	<==== default 0
 	
-- Arrays.asList("a", "b", "c");
-	static List<Dish> specialMenu = Arrays.asList( 
-	new Dish("seasonal fruit", true, 120, Dish.Type.OTHER),
-	new Dish("prawns", false, 300, Dish.Type.FISH));
-	
-- Stream<String> streamOfWords = Arrays.stream( {"GoodBye", "World"} );
+- converting from primitive stream to a stream of objects:
+```
+IntStream intStream = menu.stream().mapToInt(Dish::getCalories);
+Stream<Integer> stream = intStream.boxed(); 
+```
+
+- OptionalInt
+- OptionalDouble
+- OptionalLong
+	- max()	<==== default CAN'T be 0
+	- min()
+	- average()
+
+	- orElse(5) <==== returns primitive value of int '5' [not optional int]
+
+
+## numeric rage:
+- range	<================ exclusive (2, 5) '5' is not included: 2,3,4
+- rangeClosed	<======== inclusive (2, 5) '5' is included: 2,3,4,5
+
+
+
+
+## building streams:
+- Stream.of("a", "b", "c")................................... from values 
+- Stream.empty()............................................. empty stream 
+- Stream.ofNullable()........................................ from nullable: if no value found, it will create Stream.empty otherwise Stream.of() vlaue
+- Arrays.stream(new String[]{"a", "b", "c", "d", "e"})....... from Arrays
+- (Arrays.asList("a", "b", "c")).stream()
+- Stream<String> lines = Files.lines(Paths.get("data.txt"), Charset.defaultCharset())...... from files
+- Stream.iterate(0, n->n+2).limit(10)........................ from infinite stream
+- IntStream.range(1, 100).................................... 
 
 
 - Building streams [summary]:
@@ -331,9 +365,9 @@ EX with [lambda]
 			Stream<String> homeValueStream = Stream.ofNullable(System.getProperty("home"));
 	Arrays.stream()
 		int sum = Arrays.stream( {2, 3, 5, 7, 11, 13} ).sum();
-	l2.stream()
+	list2.stream()
 		[from a List]
-			List<String> l2 = Arrays.asList("a", "b", "c"); Stream<String> streamL2 = l2.stream();
+			List<String> list2 = Arrays.asList("a", "b", "c"); Stream<String> streamL2 = list2.stream();
 	collc.stream()
 		[from a Collection]
 			Collection<String> collection = Arrays.asList("a", "b", "c"); 
@@ -369,6 +403,21 @@ EX with [lambda]
 		[infinite stream]
 			Stream.generate(() -> Double.toString(Math.random() * 1000)).limit(10);
 ```	
+
+
+
+- Stream.concat( Stream(a), Stream(b) )	// also you can use flatMap(): search for an example..
+- Stream.of(l1, l2)
+- Stream.of(n1, n2).flatMap(Collection::stream);
+	
+- Arrays.asList("a", "b", "c");
+	static List<Dish> specialMenu = Arrays.asList( 
+	new Dish("seasonal fruit", true, 120, Dish.Type.OTHER),
+	new Dish("prawns", false, 300, Dish.Type.FISH));
+	
+- Stream<String> streamOfWords = Arrays.stream( {"GoodBye", "World"} );
+
+
 
 - .stream()
 - .parallelStream()
@@ -510,35 +559,37 @@ EX with [lambda]
 								.sum();
 			..
 			
-	
-	[OptionalInt]
-	[OptionalDouble]
-	[OptionalLong]
-		.get()
-		.orElse()
-		.orElseGet()
-	
-			OptionalInt maxCalories = menu.stream()
-											.mapToInt(Dish::getCalories)
-											.max();
-			int max = maxCalories.orElse(1);	<============================= // if no elements, set default value to 1
-			
 
-
-	[IntStream]
-	[DoubleStream]
-	[LongStream]
+	Numeric Stream:	
+		[OptionalInt]
+		[OptionalDouble]
+		[OptionalLong]
+			.get()
+			.orElse()
+			.orElseGet()
 		
-			-supports: .sum .min .max .average  .rang .rangClosed
+				OptionalInt maxCalories = menu.stream()
+												.mapToInt(Dish::getCalories)
+												.max();
+				int max = maxCalories.orElse(1);	<============================= // if no elements, set default value to 1
+			
+
+
+	Numeric Stream:	
+		[IntStream]
+		[DoubleStream]
+		[LongStream]
+			
+				-supports: .sum .min .max .average  .rang .rangClosed
+					
+				IntStream intStream = IntStream.range(1, 100);			// exclusive [1-99] [100 not included]
+				IntStream intStream = IntStream.rangeClosed(1, 100)		// inclusive [1-100][100 is included]
+											   .filter(n -> n%2 == 0);
 				
-			IntStream intStream = IntStream.range(1, 100);			// exclusive [1-99] [100 not included]
-			IntStream intStream = IntStream.rangeClosed(1, 100)		// inclusive [1-100][100 is included]
-										   .filter(n -> n%2 == 0);
-			
-			
-			// converting back to a stream of Objects [int -> Integer]
-			IntStream intStream = menu.stream().mapToInt(Dish::getCalories);
-			Stream<Integer> stream = intStream.boxed();
+				
+				// converting back to a stream of Objects [int -> Integer]
+				IntStream intStream = menu.stream().mapToInt(Dish::getCalories);
+				Stream<Integer> stream = intStream.boxed();
 	
 	
 			
@@ -698,7 +749,9 @@ EX with [lambda]
 			EX: sum all elements and preduce a new value
 				0: is the initial value
 				(a, b) -> a + b : BinaryOperator<T> to combine two elements
+				
 			int sum = numbers.stream().reduce(0, (a, b) -> a + b);
+			
 			{4,5,3,9}==21
 			
 			OR 
@@ -724,20 +777,34 @@ EX with [lambda]
 			
 	[sorted]
 			transactions.stream()
-					.filter(t -> t.getYear() == 2011)
-					.sorted(comparing(Transaction::getValue))
+					.filter(t -> t.getYear() == 2011)					
+					.map(Transaction::getValue)
+					.sorted()					
+					//.sorted(Comparator.reverseOrder())					
 					.forEach(System.out::println);	
-					
-					
+
+
+
+## Collection					
+## collect					
+## Collectors
+	
+	
+- group a list
+- partition a list
+- grouping and sub-grouping
 		
-	[collect()]	
-		import java.util.stream.Collectors;
+zak???		
 		
-		[Collectors.toList()]
+### collect()	
+		
+		import static java.util.stream.Collectors.*;
+		
+		- Collectors.toList()
 			List<Transaction> transactions = transactionStream
 												.collect(Collectors.toList());
 		
-		[Collectors.counting()]		
+		- Collectors.counting()]		
 			long howManyDishes = menu.stream().collect(Collectors.counting());	// menu.stream().count();								
 	
 		[Collectors.maxBy()]
@@ -1036,10 +1103,10 @@ Topic topic = topics.stream().filter(e -> e.getId().equalsIgnoreCase(id)).findFi
 		
 		
 =============================
-#[sort]  inventory.sort(comparing(Apple::getWeight));
-		inventory.sort(comparing(Apple::getWeight).reversed()); 
+#[sort]  inventory.sort(Comparator.comparing(Apple::getWeight));
+		inventory.sort(Comparator.comparing(Apple::getWeight).reversed()); 
 		
-		inventory.sort(comparing(Apple::getWeight) 			// sort by decreasing weight
+		inventory.sort(Comparator.comparing(Apple::getWeight) 			// sort by decreasing weight
 						.reversed()
 						.thenComparing(Apple::getCountry)); // sort further by country when apples have the same weight.
 		
@@ -1556,8 +1623,8 @@ java timer
 =============================
 =============================
 =============================
-- Debug Streams
-- EX:
+## Debug Streams
+### EX:
 ```
 List<String> names =
 	 menu.stream()
@@ -1583,6 +1650,34 @@ This code, when executed, will print the following:
 	mapping:chicken
 	
 	[pork, beef, chicken]
+```
+
+
+### Using peek()
+- This method exists mainly to support debugging, 
+	where you want to see the elements as they flow past a certain point in a pipeline
+- between intermediate and terminal operations
+- does nothing if it is in the intermediate operations only.
+
+EX2:
+
+```
+    Stream.iterate(0, i -> i + 1)
+          .limit(5)
+          .map(i -> i + 1)
+          	.peek(i -> System.out.println("Map: " + i))
+          .count()
+
+```
+EX3:
+```    	// EX3
+        Stream.of("one", "two", "three", "four", "five", "six", "Seven")
+	        .filter(e -> e.length() > 3)
+	        .peek(e -> System.out.println("Filtered value: " + e))
+	        .map(String::toUpperCase)
+	        .peek(e -> System.out.println("Mapped value: " + e))
+	        .collect(Collectors.toList())
+	        .forEach(System.out::println);
 ```
 
 

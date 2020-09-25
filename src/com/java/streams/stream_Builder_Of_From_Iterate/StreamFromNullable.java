@@ -1,4 +1,4 @@
-package com.java.streams.streamOfNullable;
+package com.java.streams.stream_Builder_Of_From_Iterate;
 
 import java.util.stream.Stream;
 

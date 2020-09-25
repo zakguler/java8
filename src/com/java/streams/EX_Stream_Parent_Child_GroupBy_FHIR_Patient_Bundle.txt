@@ -1,0 +1,60 @@
+These notes are taken from theUSIIS Microservice application
+-------------------------------------------------------------
+
+/*
+	Common_UsiisReturnedRow.java:
+		-each row contains a Patient and its related immunization information
+		-multiple Patient records.
+		-one Patient id, can have multiple immunization records.
+		-this method will group each Patient with its immunization records in a mapped(<Patient>,List<Immunization>) objects
+*/
+	
+	private <T> Bundle generateBundle(  List<Common_UsiisReturnedRow> retRows
+									  , String fullURI) {
+	
+		logger.info("z.. fullURI: " + fullURI);
+		Bundle bundle = new Bundle();
+		BundleLinkComponent bundleLinkComp = new BundleLinkComponent();
+		bundleLinkComp.setUrl(fullURI);	//get it from the request header, EX: http://localhost:5151/fhir/Patient?given=Ruth&_format=json		
+		List<BundleLinkComponent> blComponents = new ArrayList<>();
+		blComponents.add(bundleLinkComp);
+		
+		bundle.setType(Bundle.BundleType.SEARCHSET)
+				.setTotal(retRows.size())
+				.setLink(blComponents);		
+
+***		// Group persons by their ID
+		Map<String,List<Common_UsiisReturnedRow>> returnedRowsByPatientMap = 
+				retRows.stream()
+		        .collect(Collectors.groupingBy(Common_UsiisReturnedRow::getPatient_id));
+		
+		logger.info("z..returnedRowsByPatientMap.size: " + returnedRowsByPatientMap.size());
+		
+		// process all rows returned.
+		// loop: add each unique patient with its immunization/vaccine elements to the bundle 
+***		returnedRowsByPatientMap.forEach( (String k, List<Common_UsiisReturnedRow> v) -> {
+			Patient p = new Patient();
+			//System.out.print(k + " = ");
+			try {
+				p = generateNewPatientElement(v);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+			// create a bundle entry: Person resource with the temporary UUID
+			bundle.addEntry().setResource(p).setFullUrl(p.getId());
+			//add all immunization/vaccine data to the bundle
+			final Patient px = p;
+		    v.forEach(pRow -> {
+				try {
+					generatePatientAndImmunizations(bundle, px, pRow);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			});
+		    //System.out.println();
+		});
+
+		return bundle;
+
+	}

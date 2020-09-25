@@ -3,6 +3,11 @@ package com.java.streams.collect_collectors_grouping;
 
 public class Tuple {
 	
+//	enum BlogPostType {
+//	    NEWS,
+//	    REVIEW,
+//	    GUIDE
+//	}
 	
     public Tuple(BlogPostType type, String author) {
 		super();

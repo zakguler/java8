@@ -1,4 +1,4 @@
-package com.java.streams.streamFrom;
+package com.java.streams.stream_Builder_Of_From_Iterate;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -17,8 +17,9 @@ public class StreamFromAFile {
 		
 		long uniqueWords = 0;
 		
-		try (Stream<String> lines = Files.lines(Paths.get("data.txt"), Charset.defaultCharset())) {	// Streams are AutoCloseable so
-																									// there’s no need for try-finally			
+		try (Stream<String> lines = Files.lines(Paths.get("data.txt"), Charset.defaultCharset()))
+		{	// Streams are AutoCloseable so
+			// there’s no need for try-finally			
 			uniqueWords = lines.flatMap(line -> Arrays.stream(line.split(" ")))	// generate a stream of words
 								.distinct()	// Removes duplicates
 								.count();	// Counts the number of unique words			

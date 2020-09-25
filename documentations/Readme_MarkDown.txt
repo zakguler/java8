@@ -3,13 +3,28 @@
 -http://markdown.pioul.fr/
 -https://www.markdownguide.org/extended-syntax/#:~:text=To%20add%20a%20table%2C%20use,either%20end%20of%20the%20table.&text=Cell%20widths%20can%20vary%2C%20as,output%20will%20look%20the%20same.
 
+
+	Horizontal Line Separator (any of the following):
+	- - - 
+	---
+	***
+	---
+	- - -
+	--------
+	-----------------------------
+	
+    
     
     # Doc   <=== headings
     ##
     ###
     
+    
+    
+    Bullets:
     - xyz   <=== UL
       - ABC <=== inner UL
+      
       
     
     ```
