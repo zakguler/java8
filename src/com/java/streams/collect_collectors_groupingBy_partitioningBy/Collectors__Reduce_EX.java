@@ -1,7 +1,6 @@
-package com.java.streams;
+package com.java.streams.collect_collectors_groupingBy_partitioningBy;
 
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -11,9 +10,9 @@ import com.java.Common_MODELS.Dish;
 import com.java.streams.puttinItAllExample.Trader;
 import com.java.streams.puttinItAllExample.TransactionAllEX;
 
-public class Reduce_min_max {
+public class Collectors__Reduce_EX {
 
-	static List<Dish> specialMenu = Arrays.asList(
+	static List<Dish> menu = Arrays.asList(
 			new Dish("pork", false, 800, Dish.Type.MEAT),
 			new Dish("beef", false, 700, Dish.Type.MEAT),
 			new Dish("chicken", false, 400, Dish.Type.MEAT),
@@ -26,18 +25,55 @@ public class Reduce_min_max {
 	
 	public static void main(String... args) {
 		
-		Optional<Integer> ds = specialMenu
+		
+		
+		//-----------------------------------------------
+		System.out.println("== .collect(reducing(...)) ===========================");
+		int totalCalories0 = menu.stream().collect(
+	    		Collectors.reducing(0,			//....................... initial value
+						    		Dish::getCalories,	//....................... transformation function
+						    		Integer::sum));		//....................... aggregating function
+		System.out.println("totalCalories0: " + totalCalories0);
+
+		
+		
+		//-----------------------------------------------
+		System.out.println("== .reduce(Integer::sum) ===========================");
+		Optional<Integer> sumCalories = 
+					menu.stream()
+						.map(Dish::getCalories)
+						.reduce(Integer::sum);
+		System.out.println("sumCalories: " + sumCalories.get());
+		
+		
+		
+		
+		//-----------------------------------------------
+		System.out.println("== .mapToInt().sum() ===========================");
+		int totalCalories = 
+					menu.stream()
+						.mapToInt(Dish::getCalories)
+						.sum();
+		System.out.println("totalCalories: " + totalCalories);
+	
+		
+		
+		
+		//-----------------------------------------------
+		System.out.println("== .reduce(Integer::sum) ===========================");
+		Optional<Integer> ds = menu
 				.stream()
 				.map(d -> 1)
 				.reduce(Integer::sum);
 		
 		System.out.println("# od Dishes: " + ds.get());
 			
-		// same as [specialMenu.stream().count()]
-		System.out.println("another way: " + specialMenu.stream().count());
+		System.out.println("== .count() ===========================");
+		// same as [menu.stream().count()]
+		System.out.println("another way: " + menu.stream().count());
 		
 		
-		//-----
+		//-----------------------------------------------
 		// [reduce] reduce the stream by multiplying all the elements.
 		int i2 = IntStream.range(1, 5).reduce(1, (x, y) -> x * y); // = 24... range 5 is exclusive
 
@@ -58,79 +94,15 @@ public class Reduce_min_max {
 		new TransactionAllEX(alanTrader, 2012, 950)
 		);
 
-
 		//----------	
 		System.out.println("==================================================================================");
-		System.out.println("1 find all transactions in 2011 and sort them (small to high)");
-//		List<Transaction> tr2011 =
-//				 transactions.stream()
-//				 .filter(transaction -> transaction.getYear() == 2011) 
-//		???		 .sorted(comparing(Transaction::getValue))
-//				 .collect(Collectors.toList()); 
-		List<Integer> tr2011 =
-				 transactions.stream()
-				.filter(t -> t.getYear() == 2011)					
-				.map(TransactionAllEX::getValue)
-				.sorted()					
-				//.sorted(Comparator.reverseOrder())					
-				.collect(Collectors.toList()); 
-		
-		System.out.println(tr2011);
-
-
-		//----------	
-		System.out.println("==================================================================================");
-		System.out.println("2 What are the unique cities where the traders work?");
-		List<String> cities =
-				 transactions.stream()
-				 .map(transaction -> transaction.getTrader().getCity())
-				 .distinct()
-				 .collect(Collectors.toList()); 
-		
-		System.out.println(cities);
+		System.out.println("x What’s the total value of all the transactions?");
+		Optional<Integer> vSum = transactions.stream()
+										  .map(TransactionAllEX::getValue)
+										  .reduce(Integer::sum);
+		System.out.println("z..vSum: " + vSum.get());
 
 		
-
-		//----------	
-		System.out.println("==================================================================================");
-		System.out.println("3 Finds all traders from Cambridge and sort them by name");
-		List<Trader> traders =
-				 transactions.stream()
-				 .map(TransactionAllEX::getTrader)
-				 .filter(trader -> trader.getCity().equals("Cambridge"))
-				 .distinct()
-				 .sorted(Comparator.comparing(Trader::getName))
-				 .collect(Collectors.toList()); 
-		
-		traders.forEach( t -> System.out.println(t.getName()) );
-
-
-
-
-		//----------	
-		System.out.println("==================================================================================");
-		System.out.println("4 Returns a string of all traders’ names sorted alphabetically");
-		String traderStr =
-				 transactions.stream()
-				 .map(transaction -> transaction.getTrader().getName())
-				 .distinct()
-				 .sorted()
-				 .collect(Collectors.joining());  
-		
-		System.out.println(traderStr);
-
-
-
-		//----------	
-		System.out.println("==================================================================================");
-		System.out.println("5 Are any traders based in Milan?");
-		boolean milan =
-				 transactions.stream()
-				 .anyMatch(transaction -> transaction.getTrader().getName().equalsIgnoreCase("Milan"));  
-		
-		System.out.println(traderStr);
-
-
 
 		//----------	
 		System.out.println("==================================================================================");

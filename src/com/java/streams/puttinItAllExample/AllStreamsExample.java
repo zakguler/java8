@@ -18,13 +18,13 @@ public class AllStreamsExample {
 		Trader alan = new Trader("Alan","Cambridge");
 		Trader brian = new Trader("Brian","Cambridge");
 		
-		List<Transaction> transactions = Arrays.asList(
-		new Transaction(brian, 2011, 300),
-		new Transaction(raoul, 2012, 1000),
-		new Transaction(raoul, 2011, 400),
-		new Transaction(mario, 2012, 710),
-		new Transaction(mario, 2012, 700),
-		new Transaction(alan, 2012, 950)
+		List<TransactionAllEX> transactions = Arrays.asList(
+		new TransactionAllEX(brian, 2011, 300),
+		new TransactionAllEX(raoul, 2012, 1000),
+		new TransactionAllEX(raoul, 2011, 400),
+		new TransactionAllEX(mario, 2012, 710),
+		new TransactionAllEX(mario, 2012, 700),
+		new TransactionAllEX(alan, 2012, 950)
 		);
 		
 //		1 Find all transactions in the year 2011 and sort them by value (small to high).
@@ -41,7 +41,7 @@ public class AllStreamsExample {
 		System.out.println("1 Find all transactions in the year 2011 and sort them by value (small to high)");
 		transactions.stream()
 					.filter(t -> t.getYear() == 2011)
-					.sorted(comparing(Transaction::getValue))
+					.sorted(comparing(TransactionAllEX::getValue))
 					//.collect(toList())
 					.forEach(System.out::println);
 		
@@ -98,7 +98,7 @@ public class AllStreamsExample {
 		System.out.println("6 Print the values of all transactions from the traders living in Cambridge");
 		transactions.stream()
 					.filter(t -> t.getTrader().getCity().equalsIgnoreCase("Cambridge"))
-					.map(Transaction::getValue)
+					.map(TransactionAllEX::getValue)
 					.forEach(System.out::println);
 
 		
@@ -106,7 +106,7 @@ public class AllStreamsExample {
 		System.out.println("==================================================================================");
 		System.out.println("7 What’s the highest value of all the transactions?");
 		Optional<Integer> vMax = transactions.stream()
-										  .map(Transaction::getValue)
+										  .map(TransactionAllEX::getValue)
 										  .reduce(Integer::max);
 		System.out.println(vMax.get());
 
@@ -115,13 +115,13 @@ public class AllStreamsExample {
 		System.out.println("==================================================================================");
 		System.out.println("8 Find the transaction with the smallest value.");
 		Optional<Integer> vMin = transactions.stream()
-				  .map(Transaction::getValue)
+				  .map(TransactionAllEX::getValue)
 				  .reduce(Integer::min);
 		System.out.println(vMin.get());
 		//OR
 		Optional<Integer> vMin2 = transactions.stream()
 				  .reduce( (t1, t2) -> t1.getValue() < t2.getValue() ? t1 : t2 )
-				  .map(Transaction::getValue);
+				  .map(TransactionAllEX::getValue);
 		System.out.println(vMin2.get());
 		
 

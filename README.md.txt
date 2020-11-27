@@ -31,6 +31,142 @@
 - exports com.java.collections.mapList;
 	
 
+
+-----------------------------
+-----------------------------
+-----------------------------
+## make a copy for a list using streams:
+
+	    List<Z_Transaction> transactions = new ArrayList<>(Arrays.asList(
+	            new Z_Transaction("a12", 2011, 300),
+	            new Z_Transaction("c14", 2012, 1000),
+	            new Z_Transaction("b13", 2011, 400),
+	            new Z_Transaction("720", 2012, 710),
+	            new Z_Transaction("344", 2012, 700),
+	            new Z_Transaction("983", 2012, 950)
+	        ));
+	    
+	    // generate new copy
+	    List<Z_Transaction> transactions1 = transactions.stream().collect(Collectors.toList());
+	    List<Z_Transaction> transactions2 = transactions.stream().collect(Collectors.toList());
+	    List<Z_Transaction> transactions3 = transactions.stream().collect(Collectors.toList());
+	    List<Z_Transaction> transactions4 = transactions.stream().collect(Collectors.toList());
+	    List<Z_Transaction> transactions5 = transactions.stream().collect(Collectors.toList());
+
+
+-----------------------------
+-----------------------------
+-----------------------------
+## Collection Enhancements
+## Immutable Collections
+### Collection Factories
+- List Factory  
+- Set Factory  
+- Map Factory  
+
+
+**NEW**
+- *List.of()*
+- *Set.of()*
+- *Map.of()*
+- *Map.ofEntries()*  
+
+### new ArrayList<>():  
+```	
+		List<String> friends = new ArrayList<>();  
+		friends.add("Raphael");  
+		friends.add("Olivia");  
+		friends.add("Thibaut");  
+```
+
+### Arrays.asList("Raphael", "Olivia")    
+- can update but can NOT add new elements.  
+- you can change that by using new ArrayList(...) or new HasSet:  
+		_Set<String> friends = new HashSet<>(Arrays.asList("Raphael", "Olivia", Thibaut"));_
+
+```	
+		List<String> friends = Arrays.asList("Raphael", "Olivia");  
+		friends.set(0, "Richard");  
+		friends.add("Thibaut");   
+```
+### Stream.of("Raphael", "Olivia", "Thibaut")..  
+```
+		Set<String> friends = Stream.of("Raphael", "Olivia", "Thibaut")  
+		 .collect(Collectors.toSet());
+```
+
+### __NEW__  
+
+- List.of(("Raphael", "Olivia", "Thibaut")  
+	- you still can NOT add elements to it. 
+	- can NOT modify elements.  
+	- does not accept null element.  
+```
+		List<String> friends = List.of("Raphael", "Olivia", "Thibaut");
+```
+
+- Set.of
+	- can NOT contain a duplicated element.
+	- you still can NOT add elements to it. 
+	- can NOT modify elements.  
+	
+```
+		Set<String> friends = Set.of("Raphael", "Olivia", "Thibaut");
+		
+		Set<String> friends = Set.of("Raphael", "Olivia", "Olivia"); <== java.lang.IllegalArgumentException: duplicate element: Olivia
+```
+
+- Map.of()
+- Map.ofEntries()
+ 
+	- Map.of() create up to 10 key/map fields  
+	- for more element, bigger/more elements use Map.ofEntries()  
+	- will mutate (changes) the same collection  
+	- unlike the stream, it produces a new reult (copy's it).   
+	
+	
+```
+		Map<String, Integer> ageOfFriends
+ 							= Map.of("Raphael", 30, "Olivia", 25, "Thibaut", 26);
+ 		
+ 		import static java.util.Map.entry;
+		Map<String, Integer> ageOfFriends
+							 = Map.ofEntries(entry("Raphael", 30),
+							 				 entry("Olivia", 25),
+							 				 entry("Thibaut", 26));
+							 
+```
+
+
+
+
+
+
+
+
+-----------------------------
+-----------------------------
+-----------------------------
+
+## Functional Interfaces Summary
+---
+
+- Predicate.test() ............. T -> boolean
+
+- Consumer.accept() ............ T -> void
+- BiConsumer() ................. (T, U) -> void
+
+- Supplier.get() ............... () -> T
+
+- Function.apply() ............. T -> R
+
+- BinaryOperator ............... (T, T) -> T
+
+---
+
+
+
+
 ## Functional Interfaces
 
 you can use lambda expression in the context of a Functional Interface 
@@ -66,7 +202,7 @@ you can use lambda expression in the context of a Functional Interface
 
 
 
-### Predicate.
+### Predicate
 - .test()............................. T -> boolean... List<String> strString = filter( listOfStrings, (String s) -> s.!s.isEmpty() );
 
 - .isEqual()
@@ -323,7 +459,7 @@ EX with [lambda]
 - converting from primitive stream to a stream of objects:
 ```
 IntStream intStream = menu.stream().mapToInt(Dish::getCalories);
-Stream<Integer> stream = intStream.boxed(); 
+Stream<Integer> stream = intStream.boxed(); <=== you have to box the IntStream<int> to convert it to a stream<Integer>
 ```
 
 - OptionalInt
@@ -589,7 +725,7 @@ Stream<Integer> stream = intStream.boxed();
 				
 				// converting back to a stream of Objects [int -> Integer]
 				IntStream intStream = menu.stream().mapToInt(Dish::getCalories);
-				Stream<Integer> stream = intStream.boxed();
+				Stream<Integer> stream = intStream.boxed(); <=== you have to box the IntStream<int> to convert it to a stream<Integer>
 	
 	
 			
@@ -794,7 +930,6 @@ Stream<Integer> stream = intStream.boxed();
 - partition a list
 - grouping and sub-grouping
 		
-zak???		
 		
 ### collect()	
 		
@@ -831,6 +966,10 @@ zak???
 		[collecters.joining(", ")]
 			String shortMenu = menu.stream().map(Dish::getName).collect(joining());
 	    	String shortMenu2 = menu.stream().map(Dish::getName).collect(joining(", "));
+	    	
+	    	NOTE:
+	    	if Dish has toString() method that returns the dish name, both produce a string value:
+	    	String shortMenu = menu.stream().collect(joining());
 		
 		
 		[collecters.reducing(x,y,z)]
@@ -964,6 +1103,22 @@ zak???
 
 
 			NOTE: groupingBy(f) ==> shorthand for groupingBy(f, toList())
+
+
+
+			[TOTAL]
+			[summingInt]
+			Map<Type, Integer> typeByToalCalories = 
+					menu.stream()
+					.collect(Collectors.groupingBy(Dish::getType
+							,Collectors.summingInt(Dish::getCalories) 
+							));
+			
+			typeByToalCalories.forEach((k, v) -> {
+				System.out.println(k + ": " + v);
+			});
+			
+			
 			
 			[Map] maxBy() 
 				Map<Dish.Type, Optional<Dish>> mostCaloricByType =
@@ -983,7 +1138,425 @@ zak???
 					[result set]
 ***						{FISH=salmon, OTHER=pizza, MEAT=pork}
 						
+	
+	
 						
+
+### collect
+- collector
+	- partitioningBy
+	- groupingBy
+	- collectingAndThen	<=== can be used to get a single value
+	- maxBy
+
+```
+		System.out.println("\n=====================================================");
+		System.out.println("-----partitioningBy isVegetarian ? ");
+
+//		Map<Boolean, List<Dish>> partitioningByIsVegetarian =
+//				 menu.stream()
+//				 .collect(Collectors.partitioningBy(
+//						 	dish -> dish.getType().equals(Dish.Type.OTHER)
+//						 	)); 
+		
+		Map<Boolean, List<Dish>> partitioningByIsVegetarian =
+				menu.stream()
+				.collect(Collectors.partitioningBy(Dish::isVegetarian)); 
+		
+		partitioningByIsVegetarian.forEach((k, v) -> {
+			System.out.print(k + ": "); 
+			System.out.println( v.stream().map(d->d.getName()).collect(Collectors.joining(", ")) );
+		});
+
+		List<Dish> vegetarianDishes = partitioningByIsVegetarian.get(true);
+
+		
+		System.out.println("\n=====================================================");
+		System.out.println("-----partitioningBy_n_groupingBy multi level ");
+
+		Map<Boolean, Map<Dish.Type, List<Dish>>> vegetarianDishesByType =
+				menu.stream().collect(
+				 partitioningBy(Dish::isVegetarian,
+				 groupingBy(Dish::getType))); 
+		
+		vegetarianDishesByType.forEach((k, v) -> {
+			System.out.print(k + " (k): "); 
+			v.forEach((k2,v2)->{
+				System.out.print(k2 + " (k2): ");
+				System.out.println(v2.stream().map(d->d.getName()).collect(Collectors.joining(", ")));
+			});
+			
+		});
+
+
+		System.out.println("\n=====================================================");
+		System.out.println("-----partitioningBy:");
+		System.out.println("find the most caloric dish among both vegetarian and nonvegetarian dishes::");
+
+		Map<Boolean, Dish> mostCaloricPartitionedByVegetarian =
+				menu.stream().collect(
+				 partitioningBy(Dish::isVegetarian,
+				 collectingAndThen(maxBy(Comparator.comparingInt(Dish::getCalories)),
+				 Optional::get)));
+		// That will produce the following result:
+		// {false=pork, true=pizza}
+		
+
+```
+
+
+
+## The Collector Interface
+### build a collector interface
+
+### List Factory:
+- List.of()
+	- immutable List  
+	- you can't add/modify the list: friends.add("Sam"); <=== Exception  
+	- null elements are disallowed.  
+	
+	- List<String> friends = List.of("Raphael", "Olivia", "Thibaut");  
+	  System.out.println(friends); 
+
+
+### Set Factory
+- Set.of()
+	- immutable Set
+	- no duplicates.
+	
+	- Set<String> friends = Set.of("Raphael", "Olivia", "Thibaut");  
+	  System.out.println(friends); 
+	
+
+
+### Map Factory
+- Map.of()
+	- immutable Map  
+	- up to 10 keys and values
+	
+	- Map<String, Integer> ageOfFriends = Map.of("Raphael", 30, "Olivia", 25, "Thibaut", 26);
+	  System.out.println(ageOfFriends); 
+
+	- for more than 10 keys and values,
+	  use:
+```
+			import static java.util.Map.entry;
+			Map<String, Integer> ageOfFriends
+				 = Map.ofEntries(entry("Raphael", 30),
+								 entry("Olivia", 25),
+								 entry("Thibaut", 26));
+			 
+			System.out.println(ageOfFriends); 
+```
+
+
+### Working with List and Set
+
+
+- transactions.removeIf()
+	- List<Transactions> transactions ...
+	  transactions.removeIf(t -> t...Predicate...);
+	  
+	  
+- referenceCodes.replaceAll()
+	- List<String> referenceCodes ...
+	  referenceCodes.replaceAll(code -> Character.toUpperCase(code.charAt(0)) + code.substring(1));
+
+
+### Working with Map
+```
+		// Working with Map
+		// Map.of()
+		Map<String, Integer> ageOfFriends
+		= Map.ofEntries(entry("Raphael", 30),
+			 			entry("Olivia", 25),
+			 			entry("Thibaut", 26));	
+		System.out.println(ageOfFriends);
+		
+		System.out.println("==for================================================");		
+		// for
+		for(Map.Entry<String, Integer> entry: ageOfFriends.entrySet()) {
+			String friend = entry.getKey();
+			Integer age = entry.getValue();
+			System.out.println(friend + " is " + age + " years old");
+		}
+		
+		
+		System.out.println("==forEach============================================");
+		// forEach
+//		ageOfFriends.forEach( (k,v)->{
+//			System.out.print(k);
+//			System.out.println(v);
+//		});
+		ageOfFriends.forEach((friend, age) -> System.out.println(friend + " is " +
+				age + " years old"));
+
+		
+		
+		System.out.println("==sorted=============================================");
+		// Processes the elements of
+		// the stream in alphabetic
+		// order based on the
+		// person’s name
+		
+		Map<String, String> favouriteMovies
+		 = Map.ofEntries(entry("Raphael", "Star Wars"),
+						 entry("Cristina", "Matrix"),
+						 entry("Olivia", "James Bond"));
+		
+		favouriteMovies
+		 .entrySet()
+		 .stream()
+		 .sorted(Entry.comparingByKey())
+		 .forEachOrdered(System.out::println);
+		
+		
+		System.out.println("==map..get(): getOrDefault============================");
+		// 
+		Map<String, String> favouriteMovies_2
+		 = Map.ofEntries(entry("Raphael", "Star Wars"),
+		 entry("Olivia", "James Bond"));
+		
+		// Outputs James Bond
+		System.out.println(favouriteMovies_2.getOrDefault("Olivia", "Matrix"));
+		// Outputs Matrix
+		System.out.println(favouriteMovies_2.getOrDefault("Thibaut", "Matrix")); 
+		
+		
+		System.out.println("=====================================================");
+		// -computeIfAbsent—If there’s no specified value for the given key (it’s absent or its value is null), calculate a new value by using the key and add it to the Map.
+		// -computeIfPresent—If the specified key is present, calculate a new value for it and add it to the Map.
+		// -compute—This operation calculates a new value for a given key and stores it in the Map.		
+		System.out.println("==Map..computeIfAbsent()===============");
+		
+		Map<String, List<String>> friendsToMovies = new HashMap<>();
+		friendsToMovies.put(
+					"Sam", new ArrayList<String>(Arrays.asList("The Birds","Terminator"))
+					); 
+		friendsToMovies.put(
+				"Alan", new ArrayList<String>(Arrays.asList("good bye, love","Jaws"))
+				); 
+		
+		// Current style
+		String friend = "Raphael";
+		List<String> movies = friendsToMovies.get(friend);
+		if(movies == null) {
+			 movies = new ArrayList<>();
+			 friendsToMovies.put(friend, movies);
+		}
+		movies.add("Star Wars");		
+		System.out.println(friendsToMovies); 
+		
+		// newer using: Map..computeIfAbsent()
+		friendsToMovies
+			.computeIfAbsent("James", name -> new ArrayList<>())
+		 	.add("Star Wars"); 
+		
+		System.out.println(friendsToMovies);
+		
+		
+		System.out.println("\n==Map..computeIfPresent()===============");
+		System.out.println("==see notes in the code  ===============");
+		// The computeIfPresent method calculates a new value if the current value associated
+		// with the key is present in the Map and non-null. Note a subtlety: if the function that
+		// produces the value returns null, the current mapping is removed from the Map. If you
+		// need to remove a mapping, however, an overloaded version of the remove method is
+		// better suited to the task. You learn about this method in the next section.
+
+		
+		System.out.println("\n==Map..remove()==================================================");
+
+		// current
+		Map favouriteMovies_4 = new HashMap<>();
+		String key = "Raphael";
+		String value = "Jack Reacher 2";
+		favouriteMovies_4.put(key, value);
+		System.out.println(favouriteMovies_4);
+		if (favouriteMovies_4.containsKey(key) &&
+			Objects.equals(favouriteMovies_4.get(key), value)) {
+			favouriteMovies_4.remove(key);
+			 System.out.println("Current usage: Map..remove: true");
+		}
+		else {
+			 System.out.println("Current usage: Map..remove: flase");
+		}
+
+		// newer
+		favouriteMovies_4.put(key, value);
+		System.out.println(favouriteMovies_4);
+		favouriteMovies_4.remove(key, value);
+		System.out.println("Newer usage: Map..remove: success");
+		
+		System.out.println("\n==Map..replaceAll()/replace()==================================================");
+		
+		Map<String, String> favouriteMovies_3 = new HashMap<>();
+		favouriteMovies_3.put("Raphael", "Star Wars");
+		favouriteMovies_3.put("Olivia", "james bond");
+		System.out.println(favouriteMovies_3);
+//		favouriteMovies_3.replaceAll((friend, movie) -> movie.toUpperCase());
+		favouriteMovies_3.replaceAll((k, v) -> v.toUpperCase());
+		System.out.println(favouriteMovies_3);
+		
+		
+		System.out.println("\n==Map..removeIf()==================================================");
+		
+		// current
+		Map<String, Integer> movies_2 = new HashMap<>();
+		movies_2.put("JamesBond", 20);
+		movies_2.put("Matrix", 15);
+		movies_2.put("Harry Potter", 5);
+		
+		Iterator<Map.Entry<String, Integer>> iterator =
+				movies_2.entrySet().iterator();
+		while(iterator.hasNext()) {
+		 Map.Entry<String, Integer> entry = iterator.next();
+		 if(entry.getValue() < 10) {
+		 iterator.remove();
+		 }
+		}
+		System.out.println(movies_2); 
+		
+		// newer
+		movies_2.entrySet().removeIf(entry -> entry.getValue() < 10);
+		
+
+```
+
+
+### Improved ConcurrentHashMap
+```
+		// 
+		// -forEach—Performs a given action for each (key, value)
+		// -reduce—Combines all (key, value) given a reduction function into a result
+		// -search—Applies a function on each (key, value) until the function produces a non-null result
+		
+		// Each kind of operation supports four forms, accepting functions with keys, values,
+		// Map.Entry, and (key, value) arguments:
+		// -Operates with keys and values (forEach, reduce, search)
+		// -Operates with keys (forEachKey, reduceKeys, searchKeys)
+		// -Operates with values (forEachValue, reduceValues, searchValues)
+		// -Operates with Map.Entry objects (forEachEntry, reduceEntries, searchEntries)
+		
+		// counting:
+		// -mappingCount
+		
+		// set views:
+		//	-newKeySet
+
+```
+
+
+
+
+### refactoring, testing and debugging
+
+zak???
+
+
+
+
+
+
+=============================
+=============================
+=============================
+## functional programming
+
+- First Class Function
+- Higher Order Function
+- Currying
+
+
+
+
+
+### Currying
+```
+Unit conversion Example:
+	CtoF(x) = x*9/5 + 32;
+	
+	//---
+	static double converter(double x, double f, double b) {
+		return x * f + b;
+	}
+	
+	//--- Currying
+	// 1:
+	static DoubleUnaryOperator curriedConverter(double f, double b){
+	 return (double x) -> x * f + b;
+	}
+
+	// build multiple functions(x)
+	// 2:
+	DoubleUnaryOperator convertCtoF = curriedConverter(9.0/5, 32);
+	DoubleUnaryOperator convertUSDtoGBP = curriedConverter(0.6, 0);
+	DoubleUnaryOperator convertKmtoMi = curriedConverter(0.6214, 0);
+
+	// example on how to use one of the function(x)-in-function(f,b)
+	// 3:
+	double gbp = convertUSDtoGBP.applyAsDouble(1000);
+
+```
+
+=============================
+=============================
+=============================
+## Paraller
+
+	-parallelStream()
+	- .parallel()
+	- .sequential()
+	
+	- is not Parallel friendly
+		- Stream.iterate(1L, i->i+1).limit(90).reduce(0L, Long::sum); <== much slower
+		
+	- parallel friendly:
+		-LongStream.rangeClosed(1, 99).reduce(0L, Long::sum);
+		-LongStream.rangeClosed(1, 99).parallel().reduce(0L, Long::sum); <== faster
+		
+
+	 stream.parallel()
+		 	 .filter(...)
+			 .sequential()
+			 .map(...)
+			 .parallel()
+			 .reduce();
+		 
+	But the last call to parallel or sequential wins and affects the pipeline globally. In
+	this example, the pipeline will be executed in parallel because that’s the last call in the
+	pipeline.
+
+
+
+
+
+##  Measuring stream performance 
+	To this purpose we will implement a microbenchmark using a library called Java Microbenchmark Harness (JMH). 
+
+Zak???
+
+
+
+
+## fork / join framework
+
+Zak???
+
+
+
+## Spliterator
+
+	- iterator in parallel.
+	
+
+
+
+
+
+
+
+
+
 
 =============================
 =============================
